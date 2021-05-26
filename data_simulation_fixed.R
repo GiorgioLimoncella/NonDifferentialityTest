@@ -9,7 +9,7 @@ pi_e = pi_ne*risk
 SE_A_e=0.7
 SE_AintB_e = 0.1
 SP_A_e = 0.99
-SP_B_e=0.94
+SP_B_e=0.95
 
 ## validation indices: non-exposed
 SE_A_ne=0.5
@@ -19,10 +19,10 @@ SP_B_ne=0.95
 
 ## Population: Non-Exposed
 N_non_exposed=(1-prop_exp)*N
-E_0=rep(0,N_non_exposed)
+E_0=rep(0, N_non_exposed)
 
 
-Y_0_ne=rep(0,N_non_exposed*(1-pi_ne))
+Y_0_ne=rep(0, N_non_exposed*(1-pi_ne))
 Y_1_ne=rep(1,N_non_exposed*pi_ne)
 Y_ne=c(Y_1_ne, Y_0_ne)
 
@@ -36,7 +36,8 @@ Y_e=c(Y_1_e, Y_0_e)
 ## Population: aggregated 
 Y=c(Y_e, Y_ne)
 E=c(E_1, E_0)
-data=data.frame(E,Y)
+data=data.table(E,Y)
+data_E_Y = data[ ,.N, by=.(Y, E)][order(Y, E)]
 
 
 ## Algorithm: A non-exposed
@@ -82,5 +83,6 @@ C=ifelse(A==1&B==1, 1 , 0)
 
 data=data.table(E, Y, A, B, C)
 data_aggregated = data[ , .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
-data_aggregated_Y0 = data[ Y==0, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
-data_aggregated_Y1 = data[ Y==1, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
+data_aggregated_E0 = data[ E==0, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
+data_aggregated_E1 = data[ E==1, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
+data_aggregated_E1[, sum(N)]
