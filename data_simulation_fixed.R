@@ -82,7 +82,7 @@ B=c(B_e, B_ne)
 C=ifelse(A==1&B==1, 1 , 0)
 
 data=data.table(E, Y, A, B, C)
-data_aggregated = data[ , .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
-data_aggregated_E0 = data[ E==0, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
-data_aggregated_E1 = data[ E==1, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
+data_aggregated = data[, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
+data_aggregated_E0 = data[E==0, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
+data_aggregated_E1 = data[E==1, .N, by=.(Y, E, A, B, C)][order(Y, E, A, B, C)]
 data_aggregated_E1[, sum(N)]

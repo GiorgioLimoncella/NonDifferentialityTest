@@ -11,23 +11,43 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Try function
+## Agenda
 
-```{r cars}
+- Data generation
+- Asymmetry
+- Relaxing the assumption
+- Next Steps 
+
+
+## Data generation
+
+Example: algorithm A in the non-exposed group
+
+```{r example_data_gen, echo=TRUE , eval=FALSE}
+A_TP_ne=rep(1, SE_A_ne*length(Y_1_ne))
+A_FN_ne=rep(0, (1-SE_A_ne)*length(Y_1_ne))
+A_FP_ne=rep(1, (1-SP_A_ne)*length(Y_0_ne))
+A_TN_ne=rep(0, (SP_A_ne)*length(Y_0_ne))
+
 ```
+
+
+![Fixed Data](fig_1.png)
+
+
 
 ## Asymmetry 
 
-SE_AintB is fixed -> SE_B depends on SE_A
+**So far**: SE_AintB is fixed -> SE_B depends on SE_A
 
-```{r parameters, include = TRUE, echo = TRUE}
+```{r parameters, include = TRUE, echo = TRUE, eval=FALSE}
 ## starting parameters
 N = 20000; prop_exp= 0.2
 pi_ne = 0.05; risk = 2
 pi_e = pi_ne*risk
     
 ## validation indices: exposed
-SE_A_e=0.7
+SE_A_e=  c(0.3, 0.4, 0.5, 0.6, 0.7)
 SE_AintB_e = 0.1
 SP_A_e = 0.99
 SP_B_e=0.95
@@ -39,7 +59,11 @@ SP_A_ne = 0.99
 SP_B_ne=0.95
 ```
 
-- Graph:
+```{r library, include = FALSE, echo = FALSE}
+library("ggplot2")
+library("ggthemes")
+library("ggrepel")
+```
 
 ```{r graph_simmetry_SEB_non_fixed, echo=FALSE}
 cat("\n")
@@ -59,10 +83,6 @@ DF$label[ix_label] <- c(0.335, 0.123, 0.682, 0.228, 0.968, 0.450)
 
 
 
-library("ggplot2")
-library("ggthemes")
-library("ggrepel")
-
 ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
         geom_point()+
         geom_line(size=1)+
@@ -80,7 +100,7 @@ cat("\n")
 ```
 
 
-- SE_B is fixed 
+- Fixing SE_B: 
 
 SE_B = 0.8
 
@@ -91,7 +111,7 @@ pi_ne = 0.05; risk = 2
 pi_e = pi_ne*risk
 
 ## validation indices: exposed
-SE_A_e=0.7 
+SE_A_e=c(0.3, 0.4, 0.5, 0.6, 0.7)
 SE_B_e=0.8
 SE_AintB_e = SE_A_e + SE_B_e - 1
 SP_A_e = 0.99
@@ -108,7 +128,6 @@ SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
 ```
 
 
-- Graph:
 
 ```{r graph_simmetry_SEB_fixed, echo=FALSE}
 cat("\n")
@@ -145,7 +164,7 @@ ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
 cat("\n")
 ```
 
-SE_B = 0.7
+- **Variability**: SE_B = 0.7
 ```{r parameters_3, include = TRUE, echo = TRUE}
 ## starting parameters
 N = 20000; prop_exp= 0.2
@@ -153,7 +172,7 @@ pi_ne = 0.05; risk = 2
 pi_e = pi_ne*risk
 
 ## validation indices: exposed
-SE_A_e=0.7 
+SE_A_e=c(0.3, 0.4, 0.5, 0.6, 0.7)
 SE_B_e=0.7
 SE_AintB_e = SE_A_e + SE_B_e - 1
 SP_A_e = 0.99
@@ -169,8 +188,6 @@ SP_B_ne = 0.95
 SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
 ```
 
-
-- Graph: 
 
 ```{r graph_simmetry_SEB_fixed_3, echo=FALSE}
 cat("\n")
@@ -207,7 +224,29 @@ ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
 cat("\n")
 ```
 
-## Assumption
+## Relaxing the assumption
+
+$SE_{A \cup B}$ different from 1, but with non-differential error. 
+<br>
+
+- **Prevalence** not available: 
+
+
+\begin{equation}
+
+\pi = \tfrac{P_A \times PPV_A}{SE_{A \cup B}} + \tfrac{P_B \times PPV_B}{SE_{A \cup B}} - \tfrac{P_{A \cap B} \times PPV_{A \cap B}}{SE_{A \cup B}}
+
+\end{equation}
+
+- **Risk Ratio** available:
+
+\begin{equation}
+
+\tfrac{\pi^E}{\pi^{\bar{E}}} = \tfrac{1/SE_{A \cup B}^E}{1/SE_{A \cup B}^{\bar{E}}} * \tfrac{P_A^E \times PPV_A^E + P_B^E \times PPV_B^E - P_{A \cap B}^E \times PPV_{A \cap B}^E}{P_A^\bar{E} \times PPV_A^\bar{E} + P_B^\bar{E} \times PPV_B^\bar{E} - P_{A \cap B}^\bar{E} \times PPV_{A \cap B}^\bar{E}}
+
+\end{equation}
+
+- **Test Statistic**:
 
 - Graph: 
 
@@ -336,4 +375,6 @@ SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
   SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
 ```
 
+## Next steps
 
+**??** to be filled
