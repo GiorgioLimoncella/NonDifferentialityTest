@@ -2,7 +2,7 @@ library(data.table)
 
 rm(list=ls())
 
-
+for(numero in c(100, 250, 500)){
 for(SE_exposed in c(0.3, 0.4, 0.5, 0.6, 0.7)){
   
 ## starting parameters
@@ -12,16 +12,16 @@ pi_e = pi_ne*risk
 
 ## validation indices: exposed
 SE_A_e=SE_exposed
-SE_B_e=0.8
-SE_AintB_e = SE_A_e * SE_B_e
+SE_B_e=0.7
+SE_AintB_e = (SE_A_e + SE_B_e) - 1 
 SP_A_e = 0.99
 SP_B_e=0.95
 SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
 
 ## validation indices: non-exposed
 SE_A_ne = 0.5
-SE_B_ne = 0.8
-SE_AintB_ne = SE_A_ne * SE_B_ne
+SE_B_ne = 0.7
+SE_AintB_ne = (SE_A_ne + SE_B_ne) - 1 
 SP_A_ne = 0.99
 SP_B_ne = 0.95
 SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
@@ -127,7 +127,7 @@ print(data_aggregated)
 ################################################################################
 
 # Sets A==1 and B==1
-n=nb=250
+n=nb=numero
 nsam = 1000
 
 P_A_e = sum(A==1&E==1)/sum(E==1)
@@ -218,4 +218,5 @@ for(i in 1:nsam){
 acc_95 = length(which(quant_025 < 0 & quant_975>0 ))/nsam
 rej_95 = 1-acc_95
 power= c(power, rej_95)
+}
 }
