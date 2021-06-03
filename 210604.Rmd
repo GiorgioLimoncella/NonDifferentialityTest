@@ -1,0 +1,210 @@
+---
+title: "Non Differentiality Test"
+author: "Giorgio Limoncella"
+date: "4/6/2021"
+output: 
+  rmdformats::downcute:
+  toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Try function
+
+```{r cars}
+```
+
+## Asymmetry 
+
+SE_AintB is fixed -> SE_B depends on SE_A
+
+```{r parameters, include = TRUE, echo = TRUE}
+## starting parameters
+N = 20000; prop_exp= 0.2
+pi_ne = 0.05; risk = 2
+pi_e = pi_ne*risk
+    
+## validation indices: exposed
+SE_A_e=0.7
+SE_AintB_e = 0.1
+SP_A_e = 0.99
+SP_B_e=0.95
+    
+## validation indices: non-exposed
+SE_A_ne=0.5
+SE_AintB_ne = 0.1
+SP_A_ne = 0.99
+SP_B_ne=0.95
+```
+
+- Graph:
+
+```{r graph_simmetry_SEB_non_fixed, echo=FALSE}
+cat("\n")
+
+sample=c(rep("100", 5), rep("250", 5), rep("500", 5))
+sensitivity_exposed=rep(c( 0.3, 0.4, 0.5, 0.6, 0.7),3)
+power=c(0.804, 0.335, 0.050, 0.123, 0.492,
+        0.997, 0.682, 0.061, 0.228, 0.874,
+        1.000, 0.968, 0.060, 0.450, 0.998)
+
+
+
+DF=data.frame(sensitivity_exposed, power, sample)
+ix_label <- c(2, 4, 7, 9, 12, 14)
+DF$label <- ""
+DF$label[ix_label] <- c(0.335, 0.123, 0.682, 0.228, 0.968, 0.450)
+
+
+
+library("ggplot2")
+library("ggthemes")
+library("ggrepel")
+
+ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
+        geom_point()+
+        geom_line(size=1)+
+        theme_hc()+
+        ylab("")+
+        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
+        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
+        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
+        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
+        geom_label_repel(aes(label = label),
+                         box.padding   = 0.35, 
+                         point.padding = 0.5,
+                         segment.color = 'slategrey')
+cat("\n")
+```
+
+
+- SE_B is fixed 
+
+SE_B = 0.8
+
+```{r parameters_2, include = TRUE, echo = TRUE}
+## starting parameters
+N = 20000; prop_exp= 0.2
+pi_ne = 0.05; risk = 2
+pi_e = pi_ne*risk
+
+## validation indices: exposed
+SE_A_e=0.7 
+SE_B_e=0.8
+SE_AintB_e = SE_A_e + SE_B_e - 1
+SP_A_e = 0.99
+SP_B_e=0.95
+SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+
+## validation indices: non-exposed
+SE_A_ne = 0.5
+SE_B_ne = 0.8
+SE_AintB_ne = SE_A_ne + SE_B_ne - 1
+SP_A_ne = 0.99
+SP_B_ne = 0.95
+SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+```
+
+
+- Graph:
+
+```{r graph_simmetry_SEB_fixed, echo=FALSE}
+cat("\n")
+
+sample=c(rep("100", 5), rep("250", 5), rep("500", 5))
+sensitivity_exposed=rep(c( 0.3, 0.4, 0.5, 0.6, 0.7),3)
+power=c(0.679, 0.172, 0.047, 0.244, 0.600,
+        0.983, 0.356, 0.034, 0.538, 0.954,
+        1,0.721,0.036,0.855,1)
+
+
+
+DF=data.frame(sensitivity_exposed, power, sample)
+ix_label <- c(2, 4, 7, 9, 12, 14)
+DF$label <- ""
+DF$label[ix_label] <- c(0.172, 0.244, 0.356, 0.538, 0.721, 0.855)
+
+
+
+
+ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
+        geom_point()+
+        geom_line(size=1)+
+        theme_hc()+
+        ylab("")+
+        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
+        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
+        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
+        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
+        geom_label_repel(aes(label = label),
+                         box.padding   = 0.35, 
+                         point.padding = 0.5,
+                         segment.color = 'slategrey')
+cat("\n")
+```
+
+SE_B = 0.7
+```{r parameters_3, include = TRUE, echo = TRUE}
+## starting parameters
+N = 20000; prop_exp= 0.2
+pi_ne = 0.05; risk = 2
+pi_e = pi_ne*risk
+
+## validation indices: exposed
+SE_A_e=0.7 
+SE_B_e=0.7
+SE_AintB_e = SE_A_e + SE_B_e - 1
+SP_A_e = 0.99
+SP_B_e=0.95
+SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+
+## validation indices: non-exposed
+SE_A_ne = 0.5
+SE_B_ne = 0.7
+SE_AintB_ne = SE_A_ne + SE_B_ne - 1
+SP_A_ne = 0.99
+SP_B_ne = 0.95
+SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+```
+
+
+- Graph: 
+
+```{r graph_simmetry_SEB_fixed_3, echo=FALSE}
+cat("\n")
+
+sample=c(rep("1", 5), rep("2", 5), rep("3", 5))
+sensitivity_exposed=rep(c( 0.3, 0.4, 0.5, 0.6, 0.7),3)
+power=c(1, 0.783, 0.018, 0.829, 1,
+        1, 0.797, 0.025, 0.848, 1,
+        1, 0.789, 0.021, 0.852, 1)
+
+
+
+DF=data.frame(sensitivity_exposed, power, sample)
+ix_label <- c(2, 4, 7, 9, 12, 14)
+DF$label <- ""
+DF$label[ix_label] <- c(0.172, 0.244, 0.356, 0.538, 0.721, 0.855)
+
+
+
+
+ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
+        geom_point()+
+        geom_line(size=1)+
+        theme_hc()+
+        ylab("")+
+        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
+        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
+        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
+        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
+        geom_label_repel(aes(label = label),
+                         box.padding   = 0.35, 
+                         point.padding = 0.5,
+                         segment.color = 'slategrey')
+cat("\n")
+```
+
+## Assumption
