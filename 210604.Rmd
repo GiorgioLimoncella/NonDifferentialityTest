@@ -186,7 +186,7 @@ power=c(1, 0.783, 0.018, 0.829, 1,
 DF=data.frame(sensitivity_exposed, power, sample)
 ix_label <- c(2, 4, 7, 9, 12, 14)
 DF$label <- ""
-DF$label[ix_label] <- c(0.172, 0.244, 0.356, 0.538, 0.721, 0.855)
+DF$label[ix_label] <- c(0.783, 0.829, 0.797, 0.848, 0.789, 0.852)
 
 
 
@@ -208,3 +208,132 @@ cat("\n")
 ```
 
 ## Assumption
+
+- Graph: 
+
+```{r graph_no_assumption, echo=FALSE}
+cat("\n")
+
+sensitivity_exposed=c( 0.3, 0.4, 0.5, 0.6, 0.7)
+power=c(0.995, 0.591, 0.043, 0.632, 0.997)
+
+DF=data.frame(sensitivity_exposed, power, sample)
+ix_label <- c(2, 4)
+DF$label <- ""
+DF$label[ix_label] <- c(0.591, 0.632)
+
+
+
+
+ggplot(DF, aes(x=sensitivity_exposed, y=power, label=label))+
+        geom_point(col="deeppink")+
+        geom_line(size=1, col="deeppink")+
+        theme_hc()+
+        ylab("")+
+        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
+        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
+        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
+        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
+        geom_label_repel(aes(label = label),
+                         box.padding   = 0.35, 
+                         point.padding = 0.5,
+                         segment.color = 'slategrey')
+cat("\n")
+```
+
+- point 1
+```{r 1, include = TRUE, echo = TRUE}
+## validation indices: exposed
+SE_A_e=0.3
+SE_B_e=0.6
+SE_AintB_e = 0.1
+SP_A_e = 0.99
+SP_B_e=0.95
+SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+
+## validation indices: non-exposed
+SE_A_ne = 0.5
+SE_B_ne = 0.4
+SE_AintB_ne = 0.1
+SP_A_ne = 0.99
+SP_B_ne = 0.95
+SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+```
+
+- point 2
+```{r 2, include = TRUE, echo = TRUE}
+  ## validation indices: exposed
+  SE_A_e=0.4
+  SE_B_e=0.5
+  SE_AintB_e = 0.1
+  SP_A_e = 0.99
+  SP_B_e=0.95
+  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+  
+  ## validation indices: non-exposed
+  SE_A_ne = 0.5
+  SE_B_ne = 0.4
+  SE_AintB_ne = 0.1
+  SP_A_ne = 0.99
+  SP_B_ne = 0.95
+  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+```
+
+- point 3
+```{r 3, include = TRUE, echo = TRUE}
+  ## validation indices: exposed
+  SE_A_e=0.5
+  SE_B_e=0.4
+  SE_AintB_e = 0.1
+  SP_A_e = 0.99
+  SP_B_e=0.95
+  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+  
+  ## validation indices: non-exposed
+  SE_A_ne = 0.5
+  SE_B_ne = 0.4
+  SE_AintB_ne = 0.1
+  SP_A_ne = 0.99
+  SP_B_ne = 0.95
+  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+```
+
+- point 4
+```{r 4, include = TRUE, echo = TRUE}
+  ## validation indices: exposed
+  SE_A_e=0.6
+  SE_B_e=0.3
+  SE_AintB_e = 0.1
+  SP_A_e = 0.99
+  SP_B_e=0.95
+  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+  
+  ## validation indices: non-exposed
+  SE_A_ne = 0.5
+  SE_B_ne = 0.4
+  SE_AintB_ne = 0.1
+  SP_A_ne = 0.99
+  SP_B_ne = 0.95
+  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+```
+
+- point 5
+```{r 5, include = TRUE, echo = TRUE}
+  ## validation indices: exposed
+  SE_A_e=0.7
+  SE_B_e=0.2
+  SE_AintB_e = 0.1
+  SP_A_e = 0.99
+  SP_B_e=0.95
+  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+  
+  ## validation indices: non-exposed
+  SE_A_ne = 0.5
+  SE_B_ne = 0.4
+  SE_AintB_ne = 0.1
+  SP_A_ne = 0.99
+  SP_B_ne = 0.95
+  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+```
+
+
