@@ -1,6 +1,5 @@
 ###  Analysis of the variability of the test power
-#
-#  7 february 2022
+#    7 february 2022
 
 
 rm(list=ls())
@@ -10,13 +9,12 @@ library(data.table)
 ### Parameters that affect variability  
 proportion_of_exposed = c(0.05, 0.2)  #prop_e
 prevalence_non_exposed = c(0.05, 0.2) #pi_ne 
-risk_vector = c(1.2, 2)  #risk 
+risk_vector = c(0.5, 2)  #risk 
 
 sensitivity_A_exposed <- c(0.4, 0.5, 0.6)
 
 
-sensitivity_B <- list(list(exposed = 0.9, non_exposed = 0.75),
-                      list(exposed = 0.4, non_exposed = 0.5))
+sensitivity_B <- list(list(exposed = 0.4, non_exposed = 0.5))
 
 Data_generation <- c("binomial")#, "fixed")
  
@@ -52,13 +50,13 @@ for (prop_e in proportion_of_exposed) {
         for (d_gen in Data_generation) {
           power_vector <- c()
           pippo <- pippo + 1
-          cat(paste0(i, "/", as.character(n_iter), "\n"))
+          cat(paste0(pippo, "/", as.character(n_iter), "\n"))
           SE_B_e = SE_B$exposed
           SE_B_ne = SE_B$exposed
           pi_e = pi_ne*risk
           
           compination <- rbind(compination,
-                               data.table(n = i,
+                               data.table(n = pippo,
                                           proportion_e = prop_e,
                                           prevalence_ne = pi_ne,
                                           sensitivity_B_e = SE_B_e,
