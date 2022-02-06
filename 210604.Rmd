@@ -248,13 +248,22 @@ $SE_{A \cup B}$ different from 1, but with non-differential error.
 
 - **Test Statistic**:
 
+<<<<<<< HEAD
 to be completed ...
+=======
+To be completed ...
+>>>>>>> 0b921848d4d63b3b289b317f31f8ad4e7ae193ce
 
 <br>
 <br>
 <br>
 
+<<<<<<< HEAD
 - if the statistic is still usable: 
+=======
+- if the statistic is still usable:
+
+>>>>>>> 0b921848d4d63b3b289b317f31f8ad4e7ae193ce
 
 ```{r graph_no_assumption, echo=FALSE}
 cat("\n")
