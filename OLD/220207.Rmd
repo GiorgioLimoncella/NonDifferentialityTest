@@ -1,15 +1,16 @@
 ---
 title: "Non Differentiality Test"
-author: "Giorgio Limoncella"
 date: "4/6/2021"
 output: 
-  rmdformats::robobook:
+  rmdformats::downcute:
   toc: TRUE
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+<br><br><br>
 
 ## Agenda
 
@@ -22,6 +23,80 @@ knitr::opts_chunk$set(echo = FALSE)
 
 - Literature
 
+<br><br><br>
+
+# New Assumption 
+
+
+Ipotesi Nulla:
+
+\begin{equation*}
+	\frac{SE^{e=1}_A}{SE^{e=0}_A} = 1
+\end{equation*}
+
+\begin{equation*}
+	\frac{SE^{e=1}_A}{SE^{e=0}_A} - 1 = 0
+\end{equation*}
+
+
+Se:
+
+\begin{equation*}
+	SE^{e}_A = \frac{P^{e}_A \times PPV^{e}_A}{\pi^{e}}
+\end{equation*}
+
+e:
+
+\begin{equation*}
+	\pi^e = \frac{P_A^e \times PPV_A^e}{SE_{AUB}^e} + \frac{P_B^e \times PPV_B^e}{SE_{AUB}^e} - \frac{P_{A \cap B}^e \times PPV_{A\cap B}^e}{SE_{AUB}^e}
+\end{equation*}
+
+Allora:
+
+\begin{equation*}
+SE^{e=1}_A=\tfrac{P^{e=1}_A \times PPV^{e=1}_A}{\tfrac{P_A^{e=1} \times PPV_A^{e=1}}{SE_{AUB}^{e=1}} + \tfrac{P_B^{e=1} \times PPV_B^{e=1}}{SE_{AUB}^{e=1}} - \tfrac{P_{A \cap B}^{e=1} \times PPV_{A\cap B}^{e=1}}{SE_{AUB}^{e=1}}}
+\end{equation*}
+
+
+\begin{equation*}
+SE^{e=0}_A=\tfrac{P^{e=0}_A \times PPV^{e=0}_A}{\tfrac{P_A^{e=0} \times PPV_A^{e=0}}{SE_{AUB}^{e=0}} + \tfrac{P_B^{e=0} \times PPV_B^{e=0}}{SE_{AUB}^{e=0}} - \tfrac{P_{A \cap B}^{e=0} \times PPV_{A\cap B}^{e=0}}{SE_{AUB}^{e=0}}}
+\end{equation*}
+
+\newpage
+
+Definendo:
+
+\begin{align*}
+	A^e &= P^{e=1}_A \times PPV^{e=1}_A
+	\\
+	B^e &=P^{e=1}_B \times PPV^{e=1}_B
+	\\
+	C^e &=P^{e=1}_{A \cap B} \times PPV^{e=1}_{A \cap B}
+	\\
+	A^{\bar{e}} &= P^{e=0}_A \times PPV^{e=0}_A
+	\\
+	B^{\bar{e}} &=P^{e=0}_B \times PPV^{e=0}_B
+	\\
+	C^{\bar{e}} &=P^{e=0}_{A \cap B} \times PPV^{e=0}_{A \cap B}
+	\\
+	S &= \tfrac{1}{SE_{AUB}^{e=0}} = \tfrac{1}{SE_{AUB}^{e=1}}
+\end{align*}
+	
+Sostituendo: 
+
+\begin{equation*}
+\frac{SE^{e=1}_A}{SE^{e=0}_A} =  \frac{A^e}{S(A^e + B^e - C^e)} \times  \frac{S(A^{\bar{e}} + B^{\bar{e}} - C^{\bar{e}})}{A^{\bar{e}}} = \frac{A^e(A^{\bar{e}} + B^{\bar{e}} - C^{\bar{e}})}{A^{\bar{e}}(A^e + B^e - C^e)}
+\end{equation*}
+
+
+Sostituendo ancora:
+
+\begin{equation}
+t = \frac{P^{e}_A  PPV^{e}_A (P^{\bar{e}}_A  PPV^{\bar{e}}_A + P^{\bar{e}}_B  PPV^{\bar{e}}_B - P^{\bar{e}}_{A \cap B}  PPV^{\bar{e}}_{A \cap B})}{P^{\bar{e}}_A  PPV^{\bar{e}}_A (P^{e}_A  PPV^{e}_A + P^{e}_B  PPV^{e}_B - P^{e}_{A \cap B}  PPV^{e}_{A \cap B})} - 1
+\end{equation}
+
+
+<br><br><br>
 
 ## New data simulation 
 
@@ -32,380 +107,142 @@ $$SE_A^e + SE_B^e + SE_{A \cap B}^e=SE_A^{ne} + SE_B^{ne} + SE_{A \cap B}^{ne}$$
 
 
 ```{r example_data_gen, echo=TRUE , eval=FALSE}
-
-
-
+sensitivity <- list(list(A_exposed = 0.4, A_non_exposed = 0.5, B_exposed = 0.6, B_non_exposed = 0.52),
+                    list(A_exposed = 0.5, A_non_exposed = 0.5, B_exposed = 0.6, B_non_exposed = 0.6),
+                    list(A_exposed = 0.6, A_non_exposed = 0.5, B_exposed = 0.6, B_non_exposed = 0.68))
 ```
 
 ## data.table implementation
 
-```{r example_old, echo=TRUE , eval=FALSE}
+```{r example_data_gen_2, echo=FALSE}
+library(data.table)
+  ## starting parameters
+  N = 20000; prop_e= 0.2
+  pi_ne = 0.05; risk = 2
+  pi_e = pi_ne*risk
+  
+  ## validation indices: exposed
+  SE_A_e=0.7
+  SE_B_e = 0.6
+  SP_A_e = 0.99
+  SP_B_e=0.95
 
+  ## validation indices: non-exposed
+  SE_A_ne = 0.4
+  SE_B_ne = 0.6
+  SP_A_ne = 0.99
+  SP_B_ne = 0.95
+ E = c(rep(0,(1-prop_e)*N), rep(1,prop_e*N))
+ 
+ Y = ifelse(E==1, sapply(E,function(pe){rbinom(1,1,pi_e)}),
+            sapply(E,function(pne){rbinom(1,1,pi_ne)}))
+ 
+ dati = data.table(cbind(E,Y))
+```
 
+```{r example_old, echo=TRUE}
+start_time <- Sys.time()
 
+A = NA
+A = ifelse(Y==1 & E==1, apply(dati, 1, function(SEe){rbinom(1, 1, SE_A_e)}),
+           ifelse(Y==1 & E==0, apply(dati, 1, function(SEne){rbinom(1, 1, SE_A_ne)}), 
+                  ifelse(Y==0 & E==1, apply(dati, 1, function(FPe){rbinom(1, 1, 1-SP_A_e)}), 
+                         ifelse(Y==0 & E==0, apply(dati, 1, function(FPne){rbinom(1, 1, 1-SP_A_ne)}), A))))
+
+B = NA
+B = ifelse(Y==1 & E==1, apply(dati, 1, function(SEe){rbinom(1, 1, SE_B_e)}),
+           ifelse(Y==1 & E==0, apply(dati, 1, function(SEne){rbinom(1, 1, SE_B_ne)}), 
+                  ifelse(Y==0 & E==1, apply(dati, 1, function(FPe){rbinom(1, 1, 1-SP_B_e)}), 
+                         ifelse(Y==0 & E==0, apply(dati, 1, function(FPne){rbinom(1, 1, 1-SP_B_ne)}), B))))
+
+C = NA
+C = A*B
+
+end_time <- Sys.time()
+time_taken <- end_time - start_time
+time_taken
 ```
 
 
-```{r example_data_table, echo=TRUE , eval=FALSE}
+```{r example_data_table, echo=TRUE}
+start_time <- Sys.time()
 
+dati <- dati[Y==1 & E==1, A:=rbinom(dati[Y==1 & E==1, .N], 1, SE_A_e)]
+dati <- dati[Y==1 & E==0, A:=rbinom(dati[Y==1 & E==0, .N], 1, SE_A_ne)]
+dati <- dati[Y==0 & E==1, A:=rbinom(dati[Y==0 & E==1, .N], 1, 1-SP_A_e)]
+dati <- dati[Y==0 & E==0, A:=rbinom(dati[Y==0 & E==0, .N], 1, 1-SP_A_ne)]
 
+dati <- dati[Y==1 & E==1, B:=rbinom(dati[Y==1 & E==1, .N], 1, SE_B_e)]
+dati <- dati[Y==1 & E==0, B:=rbinom(dati[Y==1 & E==0, .N], 1, SE_B_ne)]
+dati <- dati[Y==0 & E==1, B:=rbinom(dati[Y==0 & E==1, .N], 1, 1-SP_B_e)]
+dati <- dati[Y==0 & E==0, B:=rbinom(dati[Y==0 & E==0, .N], 1, 1-SP_B_ne)]
 
+end_time <- Sys.time()
+time_taken <- end_time - start_time
+time_taken
 ```
 
 ## Asymmetry 
-
-**So far**: SE_AintB is fixed -> SE_B depends on SE_A
-
-```{r parameters, include = TRUE, echo = TRUE, eval=FALSE}
-## starting parameters
-N = 20000; prop_exp= 0.2
-pi_ne = 0.05; risk = 2
-pi_e = pi_ne*risk
-    
-## validation indices: exposed
-SE_A_e=  c(0.3, 0.4, 0.5, 0.6, 0.7)
-SE_AintB_e = 0.1
-SP_A_e = 0.99
-SP_B_e=0.95
-    
-## validation indices: non-exposed
-SE_A_ne=0.5
-SE_AintB_ne = 0.1
-SP_A_ne = 0.99
-SP_B_ne=0.95
-```
 
 ```{r library, include = FALSE, echo = FALSE}
 library("ggplot2")
 library("ggthemes")
 library("ggrepel")
+library(plotly)
 ```
 
+
+Combination 
 ```{r graph_simmetry_SEB_non_fixed, echo=FALSE}
 cat("\n")
 
-sample=c(rep("100", 5), rep("250", 5), rep("500", 5))
-sensitivity_exposed=rep(c( 0.3, 0.4, 0.5, 0.6, 0.7),3)
-power=c(0.804, 0.335, 0.050, 0.123, 0.492,
-        0.997, 0.682, 0.061, 0.228, 0.874,
-        1.000, 0.968, 0.060, 0.450, 0.998)
+combination=c(rep("1", 3), 
+              rep("2", 3), 
+              rep("3", 3),
+              rep("4", 3), 
+              rep("5", 3), 
+              rep("6", 3),
+              rep("7", 3), 
+              rep("8", 3))
+
+sensitivity_exposed=rep(c( 0.4, 0.5, 0.6),8)
+
+power=c(0.061, 0.080, 0.073,
+        0.127, 0.053, 0.274,
+        0.145, 0.061, 0.132,
+        0.716, 0.083, 0.980,
+        0.180, 0.029, 0.093,
+        0.364, 0.047, 0.580,
+        0.446, 0.051, 0.295,
+        0.988, 0.058, 0.991)
 
 
 
-DF=data.frame(sensitivity_exposed, power, sample)
-ix_label <- c(2, 4, 7, 9, 12, 14)
-DF$label <- ""
-DF$label[ix_label] <- c(0.335, 0.123, 0.682, 0.228, 0.968, 0.450)
+DF=data.frame(sensitivity_exposed, power, combination)
+#ix_label <- c(2, 4, 7, 9, 12, 14)
+#DF$label <- ""
+#DF$label[ix_label] <- c(0.335, 0.123, 0.682, 0.228, 0.968, 0.450)
 
 
 
-ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
+p <- ggplot(DF, aes(x=sensitivity_exposed, y=power, col=combination))+ #, label=label
         geom_point()+
         geom_line(size=1)+
         theme_hc()+
         ylab("")+
-        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
-        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
+        #scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
+        scale_x_continuous(c(0, 1)) + # )#breaks=sensitivity_exposed, labels=sensitivity_exposed)+
+        scale_y_continuous(c(0, 1)) +
         geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
-        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
-        geom_label_repel(aes(label = label),
-                         box.padding   = 0.35, 
-                         point.padding = 0.5,
-                         segment.color = 'slategrey')
-cat("\n")
-```
-
-
-- Fixing SE_B: 
-
-SE_B = 0.8
-
-```{r parameters_2, include = TRUE, echo = TRUE}
-## starting parameters
-N = 20000; prop_exp= 0.2
-pi_ne = 0.05; risk = 2
-pi_e = pi_ne*risk
-
-## validation indices: exposed
-SE_A_e=c(0.3, 0.4, 0.5, 0.6, 0.7)
-SE_B_e=0.8
-SE_AintB_e = SE_A_e + SE_B_e - 1
-SP_A_e = 0.99
-SP_B_e=0.95
-SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
-
-## validation indices: non-exposed
-SE_A_ne = 0.5
-SE_B_ne = 0.8
-SE_AintB_ne = SE_A_ne + SE_B_ne - 1
-SP_A_ne = 0.99
-SP_B_ne = 0.95
-SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
-```
-
-
-
-```{r graph_simmetry_SEB_fixed, echo=FALSE}
-cat("\n")
-
-sample=c(rep("100", 5), rep("250", 5), rep("500", 5))
-sensitivity_exposed=rep(c( 0.3, 0.4, 0.5, 0.6, 0.7),3)
-power=c(0.679, 0.172, 0.047, 0.244, 0.600,
-        0.983, 0.356, 0.034, 0.538, 0.954,
-        1,0.721,0.036,0.855,1)
-
-
-
-DF=data.frame(sensitivity_exposed, power, sample)
-ix_label <- c(2, 4, 7, 9, 12, 14)
-DF$label <- ""
-DF$label[ix_label] <- c(0.172, 0.244, 0.356, 0.538, 0.721, 0.855)
-
-
-
-
-ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
-        geom_point()+
-        geom_line(size=1)+
-        theme_hc()+
-        ylab("")+
-        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
-        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
-        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
-        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
-        geom_label_repel(aes(label = label),
-                         box.padding   = 0.35, 
-                         point.padding = 0.5,
-                         segment.color = 'slategrey')
-cat("\n")
-```
-
-- **Variability**: SE_B = 0.7
-```{r parameters_3, include = TRUE, echo = TRUE}
-## starting parameters
-N = 20000; prop_exp= 0.2
-pi_ne = 0.05; risk = 2
-pi_e = pi_ne*risk
-
-## validation indices: exposed
-SE_A_e=c(0.3, 0.4, 0.5, 0.6, 0.7)
-SE_B_e=0.7
-SE_AintB_e = SE_A_e + SE_B_e - 1
-SP_A_e = 0.99
-SP_B_e=0.95
-SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
-
-## validation indices: non-exposed
-SE_A_ne = 0.5
-SE_B_ne = 0.7
-SE_AintB_ne = SE_A_ne + SE_B_ne - 1
-SP_A_ne = 0.99
-SP_B_ne = 0.95
-SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
-```
-
-
-```{r graph_simmetry_SEB_fixed_3, echo=FALSE}
-cat("\n")
-
-sample=c(rep("1", 5), rep("2", 5), rep("3", 5))
-sensitivity_exposed=rep(c( 0.3, 0.4, 0.5, 0.6, 0.7),3)
-power=c(1, 0.783, 0.018, 0.829, 1,
-        1, 0.797, 0.025, 0.848, 1,
-        1, 0.789, 0.021, 0.852, 1)
-
-
-
-DF=data.frame(sensitivity_exposed, power, sample)
-ix_label <- c(2, 4, 7, 9, 12, 14)
-DF$label <- ""
-DF$label[ix_label] <- c(0.783, 0.829, 0.797, 0.848, 0.789, 0.852)
-
-
-
-
-ggplot(DF, aes(x=sensitivity_exposed, y=power, col=sample, label=label))+
-        geom_point()+
-        geom_line(size=1)+
-        theme_hc()+
-        ylab("")+
-        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
-        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
-        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
-        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
-        geom_label_repel(aes(label = label),
-                         box.padding   = 0.35, 
-                         point.padding = 0.5,
-                         segment.color = 'slategrey')
-cat("\n")
-```
-
-## Relaxing the assumption
-
-$SE_{A \cup B}$ different from 1, but with non-differential error. 
-<br>
-
-- **Prevalence** not available: 
-
-
-\begin{equation}
-
-\pi = \tfrac{P_A \times PPV_A}{SE_{A \cup B}} + \tfrac{P_B \times PPV_B}{SE_{A \cup B}} - \tfrac{P_{A \cap B} \times PPV_{A \cap B}}{SE_{A \cup B}}
-
-\end{equation}
-
-- **Risk Ratio** available:
-
-\begin{equation}
-
-\tfrac{\pi^E}{\pi^{\bar{E}}} = \tfrac{1/SE_{A \cup B}^E}{1/SE_{A \cup B}^{\bar{E}}} * \tfrac{P_A^E \times PPV_A^E + P_B^E \times PPV_B^E - P_{A \cap B}^E \times PPV_{A \cap B}^E}{P_A^\bar{E} \times PPV_A^\bar{E} + P_B^\bar{E} \times PPV_B^\bar{E} - P_{A \cap B}^\bar{E} \times PPV_{A \cap B}^\bar{E}}
-
-\end{equation}
-
-- **Test Statistic**:
-
-<<<<<<< HEAD
-to be completed ...
-=======
-To be completed ...
->>>>>>> 0b921848d4d63b3b289b317f31f8ad4e7ae193ce
-
-<br>
-<br>
-<br>
-
-<<<<<<< HEAD
-- if the statistic is still usable: 
-=======
-- if the statistic is still usable:
-
->>>>>>> 0b921848d4d63b3b289b317f31f8ad4e7ae193ce
-
-```{r graph_no_assumption, echo=FALSE}
-cat("\n")
-
-sensitivity_exposed=c( 0.3, 0.4, 0.5, 0.6, 0.7)
-power=c(0.995, 0.591, 0.043, 0.632, 0.997)
-
-DF=data.frame(sensitivity_exposed, power, sample)
-ix_label <- c(2, 4)
-DF$label <- ""
-DF$label[ix_label] <- c(0.591, 0.632)
-
-
-
-
-ggplot(DF, aes(x=sensitivity_exposed, y=power, label=label))+
-        geom_point(col="deeppink")+
-        geom_line(size=1, col="deeppink")+
-        theme_hc()+
-        ylab("")+
-        scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
-        scale_x_continuous( breaks=sensitivity_exposed, labels=sensitivity_exposed)+
-        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
-        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")+
-        geom_label_repel(aes(label = label),
-                         box.padding   = 0.35, 
-                         point.padding = 0.5,
-                         segment.color = 'slategrey')
-cat("\n")
-```
-
-- point 1
-```{r 1, include = TRUE, echo = TRUE}
-## validation indices: exposed
-SE_A_e=0.3
-SE_B_e=0.6
-SE_AintB_e = 0.1
-SP_A_e = 0.99
-SP_B_e=0.95
-SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
-
-## validation indices: non-exposed
-SE_A_ne = 0.5
-SE_B_ne = 0.4
-SE_AintB_ne = 0.1
-SP_A_ne = 0.99
-SP_B_ne = 0.95
-SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
-```
-
-- point 2
-```{r 2, include = TRUE, echo = TRUE}
-  ## validation indices: exposed
-  SE_A_e=0.4
-  SE_B_e=0.5
-  SE_AintB_e = 0.1
-  SP_A_e = 0.99
-  SP_B_e=0.95
-  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
+        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")
+        #geom_label_repel(aes(label = label),
+        #                 box.padding   = 0.35, 
+        #                 point.padding = 0.5,
+        #                 segment.color = 'slategrey')
   
-  ## validation indices: non-exposed
-  SE_A_ne = 0.5
-  SE_B_ne = 0.4
-  SE_AintB_ne = 0.1
-  SP_A_ne = 0.99
-  SP_B_ne = 0.95
-  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
-```
-
-- point 3
-```{r 3, include = TRUE, echo = TRUE}
-  ## validation indices: exposed
-  SE_A_e=0.5
-  SE_B_e=0.4
-  SE_AintB_e = 0.1
-  SP_A_e = 0.99
-  SP_B_e=0.95
-  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
   
-  ## validation indices: non-exposed
-  SE_A_ne = 0.5
-  SE_B_ne = 0.4
-  SE_AintB_ne = 0.1
-  SP_A_ne = 0.99
-  SP_B_ne = 0.95
-  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
+p <- suppressWarnings(ggplotly(p))
+p
+cat("\n")
 ```
 
-- point 4
-```{r 4, include = TRUE, echo = TRUE}
-  ## validation indices: exposed
-  SE_A_e=0.6
-  SE_B_e=0.3
-  SE_AintB_e = 0.1
-  SP_A_e = 0.99
-  SP_B_e=0.95
-  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
-  
-  ## validation indices: non-exposed
-  SE_A_ne = 0.5
-  SE_B_ne = 0.4
-  SE_AintB_ne = 0.1
-  SP_A_ne = 0.99
-  SP_B_ne = 0.95
-  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
-```
-
-- point 5
-```{r 5, include = TRUE, echo = TRUE}
-  ## validation indices: exposed
-  SE_A_e=0.7
-  SE_B_e=0.2
-  SE_AintB_e = 0.1
-  SP_A_e = 0.99
-  SP_B_e=0.95
-  SP_AintB_e = 1-((1-SP_A_e)*(1-SP_B_e))
-  
-  ## validation indices: non-exposed
-  SE_A_ne = 0.5
-  SE_B_ne = 0.4
-  SE_AintB_ne = 0.1
-  SP_A_ne = 0.99
-  SP_B_ne = 0.95
-  SP_AintB_ne = 1-((1-SP_A_ne)*(1-SP_B_ne))
-```
-
-## Next steps
-
-**??** to be filled

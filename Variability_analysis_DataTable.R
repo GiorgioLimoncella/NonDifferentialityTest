@@ -341,3 +341,5 @@ for (prop_e in proportion_of_exposed) {
   
 }
 
+save(compination, file = "H:/Seafile/Mia Libreria/GitHub_Repo/NonDifferentialityTest/combination.Rdata")
+save(power_list, file = "H:/Seafile/Mia Libreria/GitHub_Repo/NonDifferentialityTest/power_list.Rdata")
