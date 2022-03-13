@@ -1,6 +1,6 @@
 ---
 title: "Non Differentiality Test"
-date: "4/6/2021"
+date: "7/2/2022"
 output: 
   rmdformats::downcute:
   toc: TRUE
@@ -27,8 +27,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # New Assumption 
 
+**non-differential $SE_{AUB}$ error **
 
-Ipotesi Nulla:
+null hypothesis:
 
 \begin{equation*}
 	\frac{SE^{e=1}_A}{SE^{e=0}_A} = 1
@@ -39,19 +40,19 @@ Ipotesi Nulla:
 \end{equation*}
 
 
-Se:
+If:
 
 \begin{equation*}
 	SE^{e}_A = \frac{P^{e}_A \times PPV^{e}_A}{\pi^{e}}
 \end{equation*}
 
-e:
+and if:
 
 \begin{equation*}
 	\pi^e = \frac{P_A^e \times PPV_A^e}{SE_{AUB}^e} + \frac{P_B^e \times PPV_B^e}{SE_{AUB}^e} - \frac{P_{A \cap B}^e \times PPV_{A\cap B}^e}{SE_{AUB}^e}
 \end{equation*}
 
-Allora:
+then:
 
 \begin{equation*}
 SE^{e=1}_A=\tfrac{P^{e=1}_A \times PPV^{e=1}_A}{\tfrac{P_A^{e=1} \times PPV_A^{e=1}}{SE_{AUB}^{e=1}} + \tfrac{P_B^{e=1} \times PPV_B^{e=1}}{SE_{AUB}^{e=1}} - \tfrac{P_{A \cap B}^{e=1} \times PPV_{A\cap B}^{e=1}}{SE_{AUB}^{e=1}}}
@@ -64,7 +65,7 @@ SE^{e=0}_A=\tfrac{P^{e=0}_A \times PPV^{e=0}_A}{\tfrac{P_A^{e=0} \times PPV_A^{e
 
 \newpage
 
-Definendo:
+Defining:
 
 \begin{align*}
 	A^e &= P^{e=1}_A \times PPV^{e=1}_A
@@ -82,14 +83,14 @@ Definendo:
 	S &= \tfrac{1}{SE_{AUB}^{e=0}} = \tfrac{1}{SE_{AUB}^{e=1}}
 \end{align*}
 	
-Sostituendo: 
+Replacing: 
 
 \begin{equation*}
 \frac{SE^{e=1}_A}{SE^{e=0}_A} =  \frac{A^e}{S(A^e + B^e - C^e)} \times  \frac{S(A^{\bar{e}} + B^{\bar{e}} - C^{\bar{e}})}{A^{\bar{e}}} = \frac{A^e(A^{\bar{e}} + B^{\bar{e}} - C^{\bar{e}})}{A^{\bar{e}}(A^e + B^e - C^e)}
 \end{equation*}
 
 
-Sostituendo ancora:
+Replacing again:
 
 \begin{equation}
 t = \frac{P^{e}_A  PPV^{e}_A (P^{\bar{e}}_A  PPV^{\bar{e}}_A + P^{\bar{e}}_B  PPV^{\bar{e}}_B - P^{\bar{e}}_{A \cap B}  PPV^{\bar{e}}_{A \cap B})}{P^{\bar{e}}_A  PPV^{\bar{e}}_A (P^{e}_A  PPV^{e}_A + P^{e}_B  PPV^{e}_B - P^{e}_{A \cap B}  PPV^{e}_{A \cap B})} - 1
@@ -100,7 +101,7 @@ t = \frac{P^{e}_A  PPV^{e}_A (P^{\bar{e}}_A  PPV^{\bar{e}}_A + P^{\bar{e}}_B  PP
 
 ## New data simulation 
 
-Se $SE_{AUB}=SE_A + SE_B + SE_{A \cap B}$, per rispettare l'assunzione occorre impostare i parametri tali che:
+If $SE_{AUB}=SE_A + SE_B + SE_{A \cap B}$, to respect the assumption it is necessary to set the parameters such that::
 
 
 $$SE_A^e + SE_B^e + SE_{A \cap B}^e=SE_A^{ne} + SE_B^{ne} + SE_{A \cap B}^{ne}$$
@@ -182,15 +183,23 @@ time_taken <- end_time - start_time
 time_taken
 ```
 
-## Asymmetry 
+# Asymmetry 
 
 ```{r library, include = FALSE, echo = FALSE}
 library("ggplot2")
 library("ggthemes")
-library("ggrepel")
+#library("ggrepel")
 library(plotly)
+library(DT)
+
+load("H:/Seafile/Mia Libreria/GitHub_Repo/NonDifferentialityTest/combination.Rdata")
 ```
 
+```{r compi, include = T, echo = FALSE}
+compination <- as.data.table(compination)
+compination <- unique(compination[, -c("sensitivity_B_ne", "sensitivity_A_ne", "sensitivity_B_e", "data_gen", "n")])
+datatable(compination)
+```
 
 Combination 
 ```{r graph_simmetry_SEB_non_fixed, echo=FALSE}
