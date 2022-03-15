@@ -1,7 +1,7 @@
 ### starting parameters
 N        <- 200000
-prop_exp <- i
-pi_ne    <- j
+prop_exp <- h
+pi_ne    <- w
 risk     <- t
 pi_e     <- pi_ne*risk
 
