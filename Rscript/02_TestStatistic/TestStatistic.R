@@ -17,7 +17,7 @@ statistic <- function(P_A_e,
   TC_ne <- P_C_ne * max(PPV_A_ne, PPV_B_ne)
   
   
-  TX = (TA_e * (TA_ne + TB_ne - TC_ne) / TA_ne * (TA_e + TB_e - TC_e)) -1
+  TX = ((TA_e * (TA_ne + TB_ne - TC_ne)) / (TA_ne * (TA_e + TB_e - TC_e))) -1
   
   return(TX)
 }

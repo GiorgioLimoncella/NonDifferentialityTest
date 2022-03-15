@@ -1,8 +1,8 @@
 ### starting parameters
 N        <- 200000
-prop_exp <- 0.2
-pi_ne    <- 0.05
-risk     <- 2
+prop_exp <- i
+pi_ne    <- j
+risk     <- t
 pi_e     <- pi_ne*risk
 
 
@@ -10,7 +10,7 @@ pi_e     <- pi_ne*risk
 SE_AUB           <- 0.90
 
 ### validation indices: E=1 & Y=1
-SE_A_e           <- 0.5
+SE_A_e           <- k
 SE_B_given_A_e   <- 0.8
  
 SE_A_int_B_e       <- SE_A_e * SE_B_given_A_e
