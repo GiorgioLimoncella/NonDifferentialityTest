@@ -41,5 +41,9 @@ SP_B_ne          <- 0.90
 SP_A_int_B_ne    <- SP_A_ne * SP_B_ne
 SP_AUB_ne        <- SP_A_ne + SP_B_ne - SP_A_int_B_ne
 
-
+### Bootstrap parameters
+na    = 250  # A sample size
+nb    = 250  # B sample size
+nsam  = 1000 # Monte Carlo rep
+nboot = 500  # Bootstrap sample size
 

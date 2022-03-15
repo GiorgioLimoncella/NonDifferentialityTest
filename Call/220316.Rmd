@@ -1,0 +1,30 @@
+---
+title: "Non Differentiality Test"
+date: "16/03/2022"
+output: 
+  rmdformats::downcute:
+  toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<br><br><br>
+
+## Agenda
+
+- Non-Differentility test: conditional data simulation
+  
+- Pregnancy: predictive model 
+
+- BRAHMS: PPV confidence interval
+
+
+<br><br><br>
+
+## Non-Differentility test
+
+## Pregnancy
+
+## BRAHMS
