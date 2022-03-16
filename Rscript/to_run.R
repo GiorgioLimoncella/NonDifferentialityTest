@@ -17,10 +17,10 @@ source(paste0(thisdir,"/02_TestStatistic/TestStatistic.R"))
 ###################                Simulation                ###################
 ################################################################################
 
-prop_exp_list   <-c(0.2)            #c(0.05, 0.2)
-pi_ne_list      <-c(0.05)      #c(0.01, 0.05, 0.1)
-risk_list       <-c(2)               #c(1.1, 2)
-SE_exposed_list <-c(0.2)      #c(0.3, 0.4, 0.5, 0.6, 0.7)
+prop_exp_list   <- c(0.2)            #c(0.05, 0.2)
+pi_ne_list      <- c(0.01, 0.1)      #c(0.01, 0.05, 0.1)
+risk_list       <- c(1.1, 2)
+SE_exposed_list <- c(0.3, 0.4, 0.5, 0.6, 0.7)
 
 TestPower <- c()
 combination <- c()
@@ -55,5 +55,6 @@ for (h in prop_exp_list) {
   
 }
 
-
-
+Result <- data.table(Power = TestPower, combination = combination)
+fwrite(Result, paste0(thisdir, "/05_Results/first.csv"))
+save.image("H:/Seafile/Mia Libreria/GitHub_Repo/NonDifferentialityTest/Rscript/05_Results/env.RData")
