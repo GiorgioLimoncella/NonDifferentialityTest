@@ -5,7 +5,6 @@ pi_ne    <- 0.05
 risk     <- 2
 pi_e     <- pi_ne*risk
 
-
 ### validation indices: SE_AUB
 SE_AUB           <- 0.90
 
@@ -31,15 +30,10 @@ SE_B_given_not_A_ne <- (SE_B_ne - SE_A_int_B_ne) / (1 - SE_A_ne)
 SP_A_e           <- 0.99
 SP_B_e           <- 0.90
 
-SP_A_int_B_e     <- SP_A_e * SP_B_e
-SP_AUB_e         <- SP_A_e + SP_B_e - SP_A_int_B_e
-
 ### validation indices: E=0 & Y=0
 SP_A_ne          <- 0.99
 SP_B_ne          <- 0.90
 
-SP_A_int_B_ne    <- SP_A_ne * SP_B_ne
-SP_AUB_ne        <- SP_A_ne + SP_B_ne - SP_A_int_B_ne
 
 ### Bootstrap parameters
 na    = 250  # A sample size
