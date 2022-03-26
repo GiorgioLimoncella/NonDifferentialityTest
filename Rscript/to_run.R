@@ -24,6 +24,7 @@ SE_exposed_list <- c(0.15, 0.3, 0.4, 0.5, 0.6, 0.75, 0.9)
 
 counter <- 0
 
+
 TestPower <- c()
 combination <- c()
 time.taken <- c()
@@ -42,7 +43,7 @@ for (h in prop_exp_list) {
         
         combination <- c(combination, paste0(h, "_", w, "_", t, "_", k))
         
-        stop("first try")
+
         ### setting parameters
         source(paste0(thisdir,"/01_Parameters/TestParameters_hwtk.R"))
         
@@ -59,10 +60,12 @@ for (h in prop_exp_list) {
                           power = rej_95)
         
         DT_comb <- rbind(DT_comb, tmp)
+
         TestPower <- c(TestPower, rej_95)
         end.time <- Sys.time()
         time.taken <- c(time.taken, (end.time - start.time))
         
+
         counter <- counter + 1
         print(counter)
       }

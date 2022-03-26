@@ -1,0 +1,257 @@
+---
+title: "Non Differentiality Test"
+date: "7/2/2022"
+output: 
+  rmdformats::downcute:
+  toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<br><br><br>
+
+## Agenda
+
+- New Assumption
+  - New statistic 
+  - New data simulation 
+  - data.table implementation
+  
+- Asymmetry
+
+- Literature
+
+<br><br><br>
+
+# New Assumption 
+
+**non-differential $SE_{AUB}$ error **
+
+null hypothesis:
+
+\begin{equation*}
+	\frac{SE^{e=1}_A}{SE^{e=0}_A} = 1
+\end{equation*}
+
+\begin{equation*}
+	\frac{SE^{e=1}_A}{SE^{e=0}_A} - 1 = 0
+\end{equation*}
+
+
+If:
+
+\begin{equation*}
+	SE^{e}_A = \frac{P^{e}_A \times PPV^{e}_A}{\pi^{e}}
+\end{equation*}
+
+and if:
+
+\begin{equation*}
+	\pi^e = \frac{P_A^e \times PPV_A^e}{SE_{AUB}^e} + \frac{P_B^e \times PPV_B^e}{SE_{AUB}^e} - \frac{P_{A \cap B}^e \times PPV_{A\cap B}^e}{SE_{AUB}^e}
+\end{equation*}
+
+then:
+
+\begin{equation*}
+SE^{e=1}_A=\tfrac{P^{e=1}_A \times PPV^{e=1}_A}{\tfrac{P_A^{e=1} \times PPV_A^{e=1}}{SE_{AUB}^{e=1}} + \tfrac{P_B^{e=1} \times PPV_B^{e=1}}{SE_{AUB}^{e=1}} - \tfrac{P_{A \cap B}^{e=1} \times PPV_{A\cap B}^{e=1}}{SE_{AUB}^{e=1}}}
+\end{equation*}
+
+
+\begin{equation*}
+SE^{e=0}_A=\tfrac{P^{e=0}_A \times PPV^{e=0}_A}{\tfrac{P_A^{e=0} \times PPV_A^{e=0}}{SE_{AUB}^{e=0}} + \tfrac{P_B^{e=0} \times PPV_B^{e=0}}{SE_{AUB}^{e=0}} - \tfrac{P_{A \cap B}^{e=0} \times PPV_{A\cap B}^{e=0}}{SE_{AUB}^{e=0}}}
+\end{equation*}
+
+\newpage
+
+Defining:
+
+\begin{align*}
+	A^e &= P^{e=1}_A \times PPV^{e=1}_A
+	\\
+	B^e &=P^{e=1}_B \times PPV^{e=1}_B
+	\\
+	C^e &=P^{e=1}_{A \cap B} \times PPV^{e=1}_{A \cap B}
+	\\
+	A^{\bar{e}} &= P^{e=0}_A \times PPV^{e=0}_A
+	\\
+	B^{\bar{e}} &=P^{e=0}_B \times PPV^{e=0}_B
+	\\
+	C^{\bar{e}} &=P^{e=0}_{A \cap B} \times PPV^{e=0}_{A \cap B}
+	\\
+	S &= \tfrac{1}{SE_{AUB}^{e=0}} = \tfrac{1}{SE_{AUB}^{e=1}}
+\end{align*}
+	
+Replacing: 
+
+\begin{equation*}
+\frac{SE^{e=1}_A}{SE^{e=0}_A} =  \frac{A^e}{S(A^e + B^e - C^e)} \times  \frac{S(A^{\bar{e}} + B^{\bar{e}} - C^{\bar{e}})}{A^{\bar{e}}} = \frac{A^e(A^{\bar{e}} + B^{\bar{e}} - C^{\bar{e}})}{A^{\bar{e}}(A^e + B^e - C^e)}
+\end{equation*}
+
+
+Replacing again:
+
+\begin{equation}
+t = \frac{P^{e}_A  PPV^{e}_A (P^{\bar{e}}_A  PPV^{\bar{e}}_A + P^{\bar{e}}_B  PPV^{\bar{e}}_B - P^{\bar{e}}_{A \cap B}  PPV^{\bar{e}}_{A \cap B})}{P^{\bar{e}}_A  PPV^{\bar{e}}_A (P^{e}_A  PPV^{e}_A + P^{e}_B  PPV^{e}_B - P^{e}_{A \cap B}  PPV^{e}_{A \cap B})} - 1
+\end{equation}
+
+
+<br><br><br>
+
+## New data simulation 
+
+If $SE_{AUB}=SE_A + SE_B + SE_{A \cap B}$, to respect the assumption it is necessary to set the parameters such that::
+
+
+$$SE_A^e + SE_B^e + SE_{A \cap B}^e=SE_A^{ne} + SE_B^{ne} + SE_{A \cap B}^{ne}$$
+
+
+```{r example_data_gen, echo=TRUE , eval=FALSE}
+sensitivity <- list(list(A_exposed = 0.4, A_non_exposed = 0.5, B_exposed = 0.6, B_non_exposed = 0.52),
+                    list(A_exposed = 0.5, A_non_exposed = 0.5, B_exposed = 0.6, B_non_exposed = 0.6),
+                    list(A_exposed = 0.6, A_non_exposed = 0.5, B_exposed = 0.6, B_non_exposed = 0.68))
+```
+
+## data.table implementation
+
+```{r example_data_gen_2, echo=FALSE}
+library(data.table)
+  ## starting parameters
+  N = 20000; prop_e= 0.2
+  pi_ne = 0.05; risk = 2
+  pi_e = pi_ne*risk
+  
+  ## validation indices: exposed
+  SE_A_e=0.7
+  SE_B_e = 0.6
+  SP_A_e = 0.99
+  SP_B_e=0.95
+
+  ## validation indices: non-exposed
+  SE_A_ne = 0.4
+  SE_B_ne = 0.6
+  SP_A_ne = 0.99
+  SP_B_ne = 0.95
+ E = c(rep(0,(1-prop_e)*N), rep(1,prop_e*N))
+ 
+ Y = ifelse(E==1, sapply(E,function(pe){rbinom(1,1,pi_e)}),
+            sapply(E,function(pne){rbinom(1,1,pi_ne)}))
+ 
+ dati = data.table(cbind(E,Y))
+```
+
+```{r example_old, echo=TRUE}
+start_time <- Sys.time()
+
+A = NA
+A = ifelse(Y==1 & E==1, apply(dati, 1, function(SEe){rbinom(1, 1, SE_A_e)}),
+           ifelse(Y==1 & E==0, apply(dati, 1, function(SEne){rbinom(1, 1, SE_A_ne)}), 
+                  ifelse(Y==0 & E==1, apply(dati, 1, function(FPe){rbinom(1, 1, 1-SP_A_e)}), 
+                         ifelse(Y==0 & E==0, apply(dati, 1, function(FPne){rbinom(1, 1, 1-SP_A_ne)}), A))))
+
+B = NA
+B = ifelse(Y==1 & E==1, apply(dati, 1, function(SEe){rbinom(1, 1, SE_B_e)}),
+           ifelse(Y==1 & E==0, apply(dati, 1, function(SEne){rbinom(1, 1, SE_B_ne)}), 
+                  ifelse(Y==0 & E==1, apply(dati, 1, function(FPe){rbinom(1, 1, 1-SP_B_e)}), 
+                         ifelse(Y==0 & E==0, apply(dati, 1, function(FPne){rbinom(1, 1, 1-SP_B_ne)}), B))))
+
+C = NA
+C = A*B
+
+end_time <- Sys.time()
+time_taken <- end_time - start_time
+time_taken
+```
+
+
+```{r example_data_table, echo=TRUE}
+start_time <- Sys.time()
+
+dati <- dati[Y==1 & E==1, A:=rbinom(dati[Y==1 & E==1, .N], 1, SE_A_e)]
+dati <- dati[Y==1 & E==0, A:=rbinom(dati[Y==1 & E==0, .N], 1, SE_A_ne)]
+dati <- dati[Y==0 & E==1, A:=rbinom(dati[Y==0 & E==1, .N], 1, 1-SP_A_e)]
+dati <- dati[Y==0 & E==0, A:=rbinom(dati[Y==0 & E==0, .N], 1, 1-SP_A_ne)]
+
+dati <- dati[Y==1 & E==1, B:=rbinom(dati[Y==1 & E==1, .N], 1, SE_B_e)]
+dati <- dati[Y==1 & E==0, B:=rbinom(dati[Y==1 & E==0, .N], 1, SE_B_ne)]
+dati <- dati[Y==0 & E==1, B:=rbinom(dati[Y==0 & E==1, .N], 1, 1-SP_B_e)]
+dati <- dati[Y==0 & E==0, B:=rbinom(dati[Y==0 & E==0, .N], 1, 1-SP_B_ne)]
+
+end_time <- Sys.time()
+time_taken <- end_time - start_time
+time_taken
+```
+
+# Asymmetry 
+
+```{r library, include = FALSE, echo = FALSE}
+library("ggplot2")
+library("ggthemes")
+#library("ggrepel")
+library(plotly)
+library(DT)
+
+load("H:/Seafile/Mia Libreria/GitHub_Repo/NonDifferentialityTest/combination.Rdata")
+```
+
+```{r compi, include = T, echo = FALSE}
+compination <- as.data.table(compination)
+compination <- unique(compination[, -c("sensitivity_B_ne", "sensitivity_A_ne", "sensitivity_B_e", "data_gen", "n")])
+datatable(compination)
+```
+
+Combination 
+```{r graph_simmetry_SEB_non_fixed, echo=FALSE}
+cat("\n")
+
+combination=c(rep("1", 3), 
+              rep("2", 3), 
+              rep("3", 3),
+              rep("4", 3), 
+              rep("5", 3), 
+              rep("6", 3),
+              rep("7", 3), 
+              rep("8", 3))
+
+sensitivity_exposed=rep(c( 0.4, 0.5, 0.6),8)
+
+power=c(0.061, 0.080, 0.073,
+        0.127, 0.053, 0.274,
+        0.145, 0.061, 0.132,
+        0.716, 0.083, 0.980,
+        0.180, 0.029, 0.093,
+        0.364, 0.047, 0.580,
+        0.446, 0.051, 0.295,
+        0.988, 0.058, 0.991)
+
+
+
+DF=data.frame(sensitivity_exposed, power, combination)
+#ix_label <- c(2, 4, 7, 9, 12, 14)
+#DF$label <- ""
+#DF$label[ix_label] <- c(0.335, 0.123, 0.682, 0.228, 0.968, 0.450)
+
+
+
+p <- ggplot(DF, aes(x=sensitivity_exposed, y=power, col=combination))+ #, label=label
+        geom_point()+
+        geom_line(size=1)+
+        theme_hc()+
+        ylab("")+
+        #scale_color_manual(values = c("deeppink", "skyblue3", "yellow3"))+
+        scale_x_continuous(c(0, 1)) + # )#breaks=sensitivity_exposed, labels=sensitivity_exposed)+
+        scale_y_continuous(c(0, 1)) +
+        geom_vline(xintercept = 0.4, lty= 2, col = "slategrey")+
+        geom_vline(xintercept = 0.6, lty= 2, col = "slategrey")
+        #geom_label_repel(aes(label = label),
+        #                 box.padding   = 0.35, 
+        #                 point.padding = 0.5,
+        #                 segment.color = 'slategrey')
+  
+  
+p <- suppressWarnings(ggplotly(p))
+p
+cat("\n")
+```
+
