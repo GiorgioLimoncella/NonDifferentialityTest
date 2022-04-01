@@ -27,17 +27,17 @@ SE_A_given_B_ne     <- SE_A_int_B_ne / SE_B_ne
 SE_B_given_not_A_ne <- (SE_B_ne - SE_A_int_B_ne) / (1 - SE_A_ne)
 
 ### validation indices: E=1 & Y=0
-SP_A_e           <- 0.99
-SP_B_e           <- 0.90
+SP_A_e           <- max( 1-(pi_ne*risk), (1-pi_ne))
+SP_B_e           <- max( 1-(pi_ne*risk), (1-pi_ne)) - pi_ne/2
 
 ### validation indices: E=0 & Y=0
-SP_A_ne          <- 0.99
-SP_B_ne          <- 0.90
+SP_A_ne          <- max( 1-(pi_ne*risk), (1-pi_ne))
+SP_B_ne          <- max( 1-(pi_ne*risk), (1-pi_ne)) - pi_ne/2
 
 
 ### Bootstrap parameters
-na    = 250  # A sample size
-nb    = 250  # B sample size
+na    = z  # A sample size
+nb    = z  # B sample size
 nsam  = 1000 # Monte Carlo rep
 nboot = 500  # Bootstrap sample size
 
