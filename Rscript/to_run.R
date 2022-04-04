@@ -62,12 +62,12 @@ for (h in prop_exp_list) {
   for (w in pi_ne_list) {
     for (t in risk_list) {
       for (k in SE_exposed_list) {
-        for (z in sample_size_list)
+        for (z in sample_size_list) {
           start.time <- Sys.time()
           
           combination <- c(combination, paste0(h, "_", w, "_", t, "_", k))
           
-  
+          
           ### setting parameters
           source(paste0(thisdir,"/01_Parameters/TestParameters_hwtk.R"))
           
@@ -102,14 +102,16 @@ for (h in prop_exp_list) {
                             SP_B_ne = SP_B_ne)
           
           DT_comb <- rbind(DT_comb, tmp)
-  
+          
           TestPower <- c(TestPower, rej_95)
           end.time <- Sys.time()
           time.taken <- c(time.taken, (end.time - start.time))
           
-  
+          
           counter <- counter + 1
           print(paste0(counter, "/" , len))
+        }
+
       }
       
     }
@@ -118,7 +120,7 @@ for (h in prop_exp_list) {
   
 }
 
-fwrite(DT_comb, paste0(thisdir, "/05_Results/DT_comb.csv"))
+fwrite(DT_comb, paste0(thisdir, "/05_Results/DT_comb_sample_250.csv"))
 
 Result <- data.table(Power = TestPower, combination = combination)
 fwrite(Result, paste0(thisdir, "/05_Results/first.csv"))
