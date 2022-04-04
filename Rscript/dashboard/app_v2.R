@@ -23,7 +23,8 @@ setwd(thisdir)
 
 DT_combination <- fread(paste0(thisdir, "/../05_Results/DT_combination_v2.csv"))
 DT_PPV <- fread(paste0(thisdir, "/../05_Results/DT_sim_PPV_v2.csv"))
-                
+#DT_RR_final <- fread(paste0(thisdir, "/../05_Results/DT_RR_final.csv"))
+
 # Define UI for application that draws a histogram
 ui <- fluidPage( theme = shinytheme("flatly"),
 
@@ -53,13 +54,13 @@ ui <- fluidPage( theme = shinytheme("flatly"),
                 mainPanel(
                   HTML("<h1>Non-Differentility test</h1>"),
                   
-                  HTML('<p> The power of the non-differentiality test is calculated with the following fixed parameters: 
-                  <ul>
-                    <li>sensitivity in the unexposed group: 0.50 </li>
-                    <li>Numerosity of the validation sample: 250</li>
-                  </ul>
-                </p> 
-                <br><br>'),
+                #   HTML('<p> The power of the non-differentiality test is calculated with the following fixed parameters: 
+                #   <ul>
+                #     <li>sensitivity in the unexposed group: 0.50 </li>
+                #     <li>Numerosity of the validation sample: 250</li>
+                #   </ul>
+                # </p> 
+                # <br><br>'),
                   plotlyOutput("distPlot")
                 )
                ),
@@ -83,9 +84,9 @@ ui <- fluidPage( theme = shinytheme("flatly"),
                HTML("<br><br>"),
                   plotlyOutput("plt_PPV"),
                  tableOutput('table_params'),
-               HTML("<br><br>"),
-               HTML("<h3> RR estimation </h3>"),
-               HTML("<br><br>"),
+               # HTML("<br><br>"),
+               # HTML("<h3> RR estimation </h3>"),
+               # HTML("<br><br>"),
                
                HTML("<br><br>"),
                HTML("<h3> PPV correction </h3>"),
@@ -143,7 +144,7 @@ server <- function(input, output) {
               geom_density(alpha = 0.5)+
               labs(x = "PPV", 
                    y = "Density",
-                   title = "PPV distribution")+
+                   title = "")+
               theme_hc()
     
       plotly_PPV <- ggplotly(plt_PPV)
@@ -163,7 +164,7 @@ server <- function(input, output) {
                                       is.na(PPV), 
                                     .N, by = c("algorithm")]
       
-      DT_sel_PPV <- DT_sel_PPV[, prop_corrected := N/1000]
+      DT_sel_PPV <- DT_sel_PPV[, proportion := N/1000]
     })
     
     output$table_params <- renderTable({
