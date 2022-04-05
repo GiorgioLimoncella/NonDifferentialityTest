@@ -10,7 +10,7 @@ setwd(thisdir)
 source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
 
 ### Loading test statistic 
-source(paste0(thisdir,"/02_TestStatistic/TestStatistic.R"))
+source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
 
 
 ################################################################################

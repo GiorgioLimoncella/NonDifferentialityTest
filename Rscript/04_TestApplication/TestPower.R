@@ -106,3 +106,5 @@ for(i in 1:nsam){
 
 acc_95 = length(which(quant_025 < 0 & quant_975>0 ))/nsam
 rej_95 = 1-acc_95
+
+test_power = rej_95
