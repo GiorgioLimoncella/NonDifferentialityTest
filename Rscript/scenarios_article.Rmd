@@ -1,0 +1,381 @@
+---
+title: "Simulation scenarios"
+output: 
+  html_document:
+    theme: united
+    toc: TRUE
+    toc_float: TRUE
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, 
+                      message=F, 
+                      warning=F)
+```
+
+```{css}
+h1 {color: #02137d}
+h2 {color: #02137d}
+h3 {color: #02137d}
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {background-color: #00adef; border-color: #00adef}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Scenario 1
+```{r, scenario1}
+#### Setting the working directory
+if (!require("rstudioapi")) install.packages("rstudioapi")
+thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+setwd(thisdir)
+
+#### Loading program parameters
+source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
+
+#### Setting study parameters
+source(paste0(thisdir,"/01_Parameters/TestParameters_scenario1.R"))
+
+#### Loading test functions 
+source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
+source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
+
+#### Generating data
+source(paste0(thisdir,"/03_DataGen/ConditionalProbability.R"))
+```
+
+
+```{r, scenario1parameter}
+
+DT_params = data.table(
+  scenario = "1",
+
+SE_AUB           =SE_AUB           ,
+SE_A_e           =SE_A_e           ,
+SE_A_ne          =SE_A_ne          ,
+SE_B_e             =SE_B_e             ,
+SE_B_ne            =SE_B_ne            ,
+
+
+SP_A_e           =SP_A_e           ,
+SP_B_e           =SP_B_e           ,
+SP_A_ne          =SP_A_ne          ,
+SP_B_ne          =SP_B_ne          ,
+
+SE_B_given_A_e   =SE_B_given_A_e   ,
+SE_A_int_B_e       =SE_A_int_B_e       ,
+
+SE_A_given_B_e     =SE_A_given_B_e     ,
+SE_B_given_not_A_e =SE_B_given_not_A_e ,
+
+SE_B_given_A_ne  =SE_B_given_A_ne  ,
+SE_A_int_B_ne    =SE_A_int_B_ne    ,
+SE_A_given_B_ne    =SE_A_given_B_ne    ,
+SE_B_given_not_A_ne=SE_B_given_not_A_ne,
+
+
+N        = N       ,
+prop_exp = prop_exp,
+pi_ne    = pi_ne   ,
+risk     = risk    ,
+pi_e     = pi_e   
+)
+
+#DT_params <- rbind(DT_params, DT_params_temp)
+paged_table(DT_params)
+```
+### RR estimated with multiple indicator strategy
+
+```{r, scenario1RR}
+set.seed(7)
+#### RR distribution
+source(paste0(thisdir,"/07_RR/RiskRatio_MC_distribution.R"))
+#multiple indicator
+plt_RR
+# cat("mean")
+# mean(RR_est) # 1.983564
+# cat("SD")
+# sqrt(var(RR_est))
+```
+**mean** = `r mean(RR_est)` 
+
+### RR estimated with single indicator strategy
+
+```{r, scenario1RR_single}
+#single indicator
+plt_RR_single_indicator
+# mean(RR_single_indicator) 
+# sqrt(var(RR_single_indicator))
+```
+**mean** = `r mean(RR_single_indicator)` 
+
+
+### Bootstrap test for non-differentiality
+
+```{r, scenario1test}
+#### Non Differentiality test
+source(paste0(thisdir,"/04_TestApplication/BootTest.R"))
+plt_test
+
+```
+
+**power of the test** = 0.883
+
+```{r, scenario1power}
+#### Test Power
+#source(paste0(thisdir,"/04_TestApplication/TestPower.R"))
+#test_power # 1
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Scenario 2
+```{r, scenario2}
+#### Setting the working directory
+if (!require("rstudioapi")) install.packages("rstudioapi")
+thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+setwd(thisdir)
+
+#### Loading program parameters
+source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
+
+#### Setting study parameters
+source(paste0(thisdir,"/01_Parameters/TestParameters_scenario2.R"))
+
+#### Loading test functions 
+source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
+source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
+
+#### Generating data
+source(paste0(thisdir,"/03_DataGen/ConditionalProbability.R"))
+```
+
+```{r, scenario2parameter}
+
+DT_params_temp = data.table(
+  scenario = "2",
+
+SE_AUB           =SE_AUB           ,
+SE_A_e           =SE_A_e           ,
+SE_A_ne          =SE_A_ne          ,
+SE_B_e             =SE_B_e             ,
+SE_B_ne            =SE_B_ne            ,
+
+
+SP_A_e           =SP_A_e           ,
+SP_B_e           =SP_B_e           ,
+SP_A_ne          =SP_A_ne          ,
+SP_B_ne          =SP_B_ne          ,
+
+SE_B_given_A_e   =SE_B_given_A_e   ,
+SE_A_int_B_e       =SE_A_int_B_e       ,
+
+SE_A_given_B_e     =SE_A_given_B_e     ,
+SE_B_given_not_A_e =SE_B_given_not_A_e ,
+
+SE_B_given_A_ne  =SE_B_given_A_ne  ,
+SE_A_int_B_ne    =SE_A_int_B_ne    ,
+SE_A_given_B_ne    =SE_A_given_B_ne    ,
+SE_B_given_not_A_ne=SE_B_given_not_A_ne,
+
+
+N        = N       ,
+prop_exp = prop_exp,
+pi_ne    = pi_ne   ,
+risk     = risk    ,
+pi_e     = pi_e   
+)
+
+DT_params <- rbind(DT_params, DT_params_temp)
+paged_table(DT_params)
+```
+
+### RR estimated with multiple indicator strategy
+
+```{r, scenario2RR}
+set.seed(7)
+#### RR distribution
+source(paste0(thisdir,"/07_RR/RiskRatio_MC_distribution.R"))
+#multiple indicator
+plt_RR
+# cat("mean")
+# mean(RR_est) # 1.983564
+# cat("SD")
+# sqrt(var(RR_est))
+```
+**mean** = `r mean(RR_est)` 
+
+#### RR estimated with single indicator strategy
+
+```{r, scenario2RR_single}
+#single indicator
+plt_RR_single_indicator
+# mean(RR_single_indicator) 
+# sqrt(var(RR_single_indicator))
+```
+**mean** = `r mean(RR_single_indicator)` 
+
+### Bootstrap test for non-differentiality
+
+```{r, scenario2test}
+#### Non Differentiality test
+source(paste0(thisdir,"/04_TestApplication/BootTest.R"))
+plt_test
+
+```
+
+```{r, scenario2power}
+#### Test Power
+#source(paste0(thisdir,"/04_TestApplication/TestPower.R"))
+#test_power # 1
+```
+
+**power of the test** = 1
+
+
+
+# Scenario 0: Non Differential
+```{r, scenario3}
+#### Setting the working directory
+if (!require("rstudioapi")) install.packages("rstudioapi")
+thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+setwd(thisdir)
+
+#### Loading program parameters
+source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
+
+#### Setting study parameters
+source(paste0(thisdir,"/01_Parameters/TestParameters_scenario3_ND.R"))
+
+#### Loading test functions 
+source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
+source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
+
+#### Generating data
+source(paste0(thisdir,"/03_DataGen/ConditionalProbability.R"))
+```
+
+
+```{r, scenario3parameter}
+
+DT_params_temp = data.table(
+  scenario = "0",
+
+SE_AUB           =SE_AUB           ,
+SE_A_e           =SE_A_e           ,
+SE_A_ne          =SE_A_ne          ,
+SE_B_e             =SE_B_e             ,
+SE_B_ne            =SE_B_ne            ,
+
+
+SP_A_e           =SP_A_e           ,
+SP_B_e           =SP_B_e           ,
+SP_A_ne          =SP_A_ne          ,
+SP_B_ne          =SP_B_ne          ,
+
+SE_B_given_A_e   =SE_B_given_A_e   ,
+SE_A_int_B_e       =SE_A_int_B_e       ,
+
+SE_A_given_B_e     =SE_A_given_B_e     ,
+SE_B_given_not_A_e =SE_B_given_not_A_e ,
+
+SE_B_given_A_ne  =SE_B_given_A_ne  ,
+SE_A_int_B_ne    =SE_A_int_B_ne    ,
+SE_A_given_B_ne    =SE_A_given_B_ne    ,
+SE_B_given_not_A_ne=SE_B_given_not_A_ne,
+
+
+N        = N       ,
+prop_exp = prop_exp,
+pi_ne    = pi_ne   ,
+risk     = risk    ,
+pi_e     = pi_e   
+)
+
+DT_params <- rbind(DT_params, DT_params_temp)
+paged_table(DT_params)
+```
+
+### RR estimated with multiple indicator strategy
+
+```{r, scenario3RR}
+set.seed(7)
+#### RR distribution
+source(paste0(thisdir,"/07_RR/RiskRatio_MC_distribution.R"))
+#multiple indicator
+plt_RR
+# cat("mean")
+# mean(RR_est) # 1.983564
+# cat("SD")
+# sqrt(var(RR_est))
+```
+**mean** = `r mean(RR_est)` 
+
+### RR estimated with single indicator strategy
+
+```{r, scenario3RR_single}
+#single indicator
+plt_RR_single_indicator
+# mean(RR_single_indicator) 
+# sqrt(var(RR_single_indicator))
+```
+**mean** = `r mean(RR_single_indicator)` 
+
+
+### Bootstrap test for non-differentiality
+
+```{r, scenario3test}
+#### Non Differentiality test
+source(paste0(thisdir,"/04_TestApplication/BootTest.R"))
+plt_test
+
+```
+
+```{r, scenario3power}
+#### Test Power
+#source(paste0(thisdir,"/04_TestApplication/TestPower.R"))
+#test_power # 1
+```
+
+
+
+**power of the test** (??) = 0.115

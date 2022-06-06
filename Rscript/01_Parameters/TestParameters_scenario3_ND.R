@@ -18,7 +18,7 @@ SE_A_given_B_e     <- SE_A_int_B_e / SE_B_e
 SE_B_given_not_A_e <- (SE_B_e - SE_A_int_B_e) / (1 - SE_A_e)
 
 ### validation indices: E=0 & Y=1
-SE_A_ne          <- 0.6
+SE_A_ne          <- 0.7
 SE_B_given_A_ne  <- 0.8
 
 SE_A_int_B_ne       <- SE_A_ne * SE_B_given_A_ne

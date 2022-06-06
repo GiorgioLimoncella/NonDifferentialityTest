@@ -30,6 +30,7 @@ n1=n2=n3=n4=NULL
 tx_boot=c()
 
 RR_est=c( )
+RR_single_indicator=c( )
 PPV_A_e0=PPV_A_ne0=PPV_B_e0=PPV_B_ne0=c( )
 PPV_A_e2=PPV_A_ne2=PPV_B_e2=PPV_B_ne2=c( )
 
@@ -67,14 +68,24 @@ for(i in 1:nsam){
                                    PPV_A_ne = PPV_A_ne0[i],
                                    PPV_B_ne =  PPV_B_ne0[i]))
   
+  RR_single_indicator = c( RR_single_indicator, (P_A_e/P_A_ne) * (PPV_A_e0[i]/PPV_A_ne0[i]))
   
 }
 
 DT_RR_est <- data.table(RR_estimate = RR_est)
 plt_RR <- ggplot(DT_RR_est, aes(RR_estimate))+
-  geom_density(col="salmon", fill="salmon", alpha = 0.5)+
+  geom_density(col="grey", fill="grey", alpha = 0.5)+
   #scale_x_continuous(breaks = c(-0.5, 0, 0.5), limits = c(-0.2,1))+
-  geom_vline(xintercept = mean(RR_est), col="salmon")+
-  geom_vline(xintercept = risk, col="black")+
+  geom_vline(xintercept = mean(RR_est), col="black")+
+  geom_vline(xintercept = risk, col="salmon")+
+  labs(x="Risk Ratio estimate", y="")+
+  theme_minimal()
+
+DT_RR_single_indicator_est <- data.table(RR_estimate = RR_single_indicator)
+plt_RR_single_indicator <- ggplot(DT_RR_single_indicator_est, aes(RR_estimate))+
+  geom_density(col="grey", fill="grey", alpha = 0.5)+
+  #scale_x_continuous(breaks = c(-0.5, 0, 0.5), limits = c(-0.2,1))+
+  geom_vline(xintercept = mean(RR_single_indicator), col="black")+
+  geom_vline(xintercept = risk, col="salmon")+
   labs(x="Risk Ratio estimate", y="")+
   theme_minimal()

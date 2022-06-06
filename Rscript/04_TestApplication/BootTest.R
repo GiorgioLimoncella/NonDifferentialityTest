@@ -78,10 +78,10 @@ ub_975 = quantile(TX_boot0,0.975)
 
 DT_test <- data.table(test_statistic = TX_boot0)
 plt_test <- ggplot(DT_test, aes(TX_boot0))+
-  geom_density(col="salmon", fill="salmon", alpha = 0.5)+
+  geom_density(col="grey", fill="grey", alpha = 0.5)+
   scale_x_continuous(breaks = c(-0.5, 0, 0.5))+
-  geom_vline(xintercept = c(lb_025, ub_975), col="salmon")+
-  geom_vline(xintercept = 0, col="black")+
+  geom_vline(xintercept = c(lb_025, ub_975), col="black")+
+  geom_vline(xintercept = 0, col="red")+
   labs(x="test statistic", y="")+
   theme_minimal()
 

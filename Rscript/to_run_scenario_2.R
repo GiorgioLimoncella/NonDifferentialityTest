@@ -10,7 +10,7 @@ setwd(thisdir)
 source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
 
 ### Setting study parameters
-source(paste0(thisdir,"/01_Parameters/TestParameters_scenario1.R"))
+source(paste0(thisdir,"/01_Parameters/TestParameters_scenario2.R"))
 
 ### Loading test functions 
 source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
@@ -19,31 +19,16 @@ source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 ### Generating data
 source(paste0(thisdir,"/03_DataGen/ConditionalProbability.R"))
 
-set.seed(7)
 ### RR distribution
 source(paste0(thisdir,"/07_RR/RiskRatio_MC_distribution.R"))
-
-#multiple indicator
 plt_RR
 mean(RR_est) 
 sqrt(var(RR_est))
-
-
-#single indicator
-plt_RR_single_indicator
-mean(RR_single_indicator) 
-sqrt(var(RR_single_indicator))
-
-
-#ggsave(paste0(thisdir, "/09_Figures/RR_scenario1.png"))
-
 
 ### Non Differentiality test
 source(paste0(thisdir,"/04_TestApplication/BootTest.R"))
 plt_test
 
-#ggsave(paste0(thisdir, "/09_Figures/Test_scenario1.png"))
-
 ### Test Power
 source(paste0(thisdir,"/04_TestApplication/TestPower.R"))
-test_power # 1
+test_power
