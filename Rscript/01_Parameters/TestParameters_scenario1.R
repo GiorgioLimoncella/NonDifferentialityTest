@@ -37,6 +37,7 @@ SP_B_ne          <- 0.98
 ### Bootstrap parameters
 na    = 250  # A sample size
 nb    = 250  # B sample size
+nc    = 250  # C sample size
 nsam  = 1000 # Monte Carlo rep
 nboot = 500  # Bootstrap sample size
 

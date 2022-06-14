@@ -33,7 +33,7 @@ TX_boot0=TX_boot2=c()
 PPV_A_e0=PPV_A_ne0=PPV_B_e0=PPV_B_ne0=PPV_C_e0=PPV_C_ne0=c()
 PPV_A_e2=PPV_A_ne2=PPV_B_e2=PPV_B_ne2=PPV_C_e2=PPV_C_ne2=c()
 
-set.seed(5)
+set.seed(3)
 
 sam_Ya1 = DT_A[sample(nrow(DT_A),na),]
 sam_Yb1 = DT_B[sample(nrow(DT_B),nb),]
