@@ -42,3 +42,4 @@ plt_test
 source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample.R"))
 test_power 
 # 0.054
+# 0.062
