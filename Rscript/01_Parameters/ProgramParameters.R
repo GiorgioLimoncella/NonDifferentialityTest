@@ -19,4 +19,6 @@ if (!require("plotly")) install.packages("plotly")
 library(plotly)
 if (!require("DT")) install.packages("DT")
 library(DT)
+if (!require("doParallel")) install.packages("doParallel")
+library(doParallel)
 
