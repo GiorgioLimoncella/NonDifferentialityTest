@@ -69,13 +69,13 @@ for (h in prop_exp_list) {
           
           
           ### setting parameters
-          source(paste0(thisdir,"/01_Parameters/TestParameters_hwtk_3.R"))
+          source(paste0(thisdir,"/01_Parameters/TestParameters_hwtk_2.R"))
           
           ### Loading data
           source(paste0(thisdir,"/03_DataGen/ConditionalProbability.R"))
           
           ### Test 
-          source(paste0(thisdir,"/04_TestApplication/TestPower_C_from_AB.R"))
+          source(paste0(thisdir,"/04_TestApplication/TestPower.R"))
           
           tmp <- data.table(prop_exp = h,
                             prev_ne = w,
@@ -97,8 +97,7 @@ for (h in prop_exp_list) {
                             SE_A_given_B_ne = SE_A_given_B_ne,    
                             SE_B_given_not_A_ne = SE_B_given_not_A_ne,
                             SP_A_e = SP_A_e,          
-                            SP_B_e = SP_B_e,
-                            
+                            SP_B_e = SP_B_e,         
                             SP_A_ne = SP_A_ne,         
                             SP_B_ne = SP_B_ne)
           
@@ -121,7 +120,8 @@ for (h in prop_exp_list) {
   
 }
 
-fwrite(DT_comb, paste0(thisdir, "/05_Results/DT_comb_sample_250_C_from_AB_low_C.csv"))
+fwrite(DT_comb, paste0(thisdir, "/05_Results/DT_comb_sample_250_max_PPV_A_B.csv"))
 
 Result <- data.table(Power = TestPower, combination = combination)
-fwrite(Result, paste0(thisdir, "/05_Results/C_sample_C_from_AB_low_C.csv"))
+fwrite(Result, paste0(thisdir, "/05_Results/Results_max_PPV_A_B.csv"))
+#save.image("H:/Seafile/Mia Libreria/GitHub_Repo/NonDifferentialityTest/Rscript/05_Results/env.RData")
