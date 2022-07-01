@@ -39,4 +39,3 @@ end_parallel <- Sys.time()
 
 time_parallel <- end_parallel - start_parallel
 
-results
