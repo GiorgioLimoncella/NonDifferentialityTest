@@ -40,4 +40,4 @@ plt_test
 
 ### Test Power
 source(paste0(thisdir,"/04_TestApplication/TestPower.R"))
-test_power 
+power_of_test 

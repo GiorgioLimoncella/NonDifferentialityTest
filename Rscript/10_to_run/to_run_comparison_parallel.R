@@ -29,6 +29,7 @@ source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample.R"))
 end_non_parallel <- Sys.time()
 
 time_non_parallel <- end_non_parallel - start_non_parallel # Time difference of 7.164448 mins
+
 ##########################################
 ### Non Differentiality test: Parallel ###
 ##########################################
@@ -37,5 +38,5 @@ start_parallel <- Sys.time()
 source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample_parallel_parlapply.R"))
 end_parallel <- Sys.time()
 
-time_parallel <- end_parallel - start_parallel
+time_parallel <- end_parallel - start_parallel # Time difference of 54.77807 secs
 
