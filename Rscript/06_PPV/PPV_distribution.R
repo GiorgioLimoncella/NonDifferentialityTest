@@ -28,14 +28,14 @@ for(i in 1:nsam){
   
   sample_A = DT_A[sample(nrow(DT_A),na),]
   sample_B = DT_B[sample(nrow(DT_B),nb),]
-  sample_C = DT_C[sample(nrow(DT_B), min(na, nb)),]
+  sample_C = DT_C[sample(nrow(DT_B),nc),]
   
-  PPV_A_e <- c(PPV_A_e , sample_A[A==1 & E==1 & Y==1, .N]/ sample_A[A==1 & E==1, .N])
-  PPV_A_ne<- c(PPV_A_ne, sample_A[A==1 & E==0 & Y==1, .N]/ sample_A[A==1 & E==0, .N])
-  PPV_B_e <- c(PPV_B_e , sample_B[B==1 & E==1 & Y==1, .N]/ sample_B[B==1 & E==1, .N])
-  PPV_B_ne<- c(PPV_B_ne, sample_B[B==1 & E==0 & Y==1, .N]/ sample_B[B==1 & E==0, .N])
-  PPV_C_e <- c(PPV_C_e , sample_C[C==1 & E==1 & Y==1, .N]/ sample_C[C==1 & E==1, .N])
-  PPV_C_ne<- c(PPV_C_ne, sample_C[C==1 & E==0 & Y==1, .N]/ sample_C[C==1 & E==0, .N])
+  PPV_A_e  <- c(PPV_A_e , sample_A[A==1 & E==1 & Y==1, .N]/ sample_A[A==1 & E==1, .N])
+  PPV_A_ne <- c(PPV_A_ne, sample_A[A==1 & E==0 & Y==1, .N]/ sample_A[A==1 & E==0, .N])
+  PPV_B_e  <- c(PPV_B_e , sample_B[B==1 & E==1 & Y==1, .N]/ sample_B[B==1 & E==1, .N])
+  PPV_B_ne <- c(PPV_B_ne, sample_B[B==1 & E==0 & Y==1, .N]/ sample_B[B==1 & E==0, .N])
+  PPV_C_e  <- c(PPV_C_e , sample_C[C==1 & E==1 & Y==1, .N]/ sample_C[C==1 & E==1, .N])
+  PPV_C_ne <- c(PPV_C_ne, sample_C[C==1 & E==0 & Y==1, .N]/ sample_C[C==1 & E==0, .N])
   
   RR <- (P_A_e * PPV_A_e + P_B_e * PPV_B_e - P_C_e * PPV_C_e) / 
     (P_A_ne * PPV_A_ne + P_B_ne * PPV_B_ne - P_C_ne * PPV_C_ne)
@@ -56,11 +56,11 @@ DT_PPV <- data.table(PPV = c(PPV_A_e,
                              PPV_B_ne,
                              PPV_C_e, 
                              PPV_C_ne), 
-                     algorithm = c(rep( "A_e", 1000),
+                     algorithm = c(rep("A_e", 1000),
                                    rep("A_ne", 1000),
-                                   rep( "B_e", 1000),
+                                   rep("B_e", 1000),
                                    rep("B_ne", 1000),
-                                   rep( "C_e", 1000),
+                                   rep("C_e", 1000),
                                    rep("C_ne", 1000)))
 
 DT_RR <- data.table(RR = RR)

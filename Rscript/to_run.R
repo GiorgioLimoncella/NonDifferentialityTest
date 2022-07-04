@@ -11,9 +11,9 @@ thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 setwd(thisdir)
 
-#----------------------
-# Getting date and time
-#----------------------
+#-----------------------------------------------
+# Getting date and time, creating results folder
+#-----------------------------------------------
 now <- paste0(year(Sys.time()), 
               "-",
               month(Sys.time()),
@@ -23,6 +23,9 @@ now <- paste0(year(Sys.time()),
               hour(Sys.time()),
               "-",
               minute(Sys.time()))
+
+dirresults <- paste0(thisdir, "/05_Results/", now)
+suppressWarnings(if (!file.exists(dirresults)) dir.create(file.path(dirresults)))
 
 #---------------------------
 # Loading program parameters
@@ -52,7 +55,6 @@ len <- length(prop_exp_list)*
 
 TestPower <- c()
 combination <- c()
-time.taken <- c()
 
 DT_comb <- data.table(prop_exp = integer(0),
                       prev_ne = integer(0),
@@ -87,8 +89,8 @@ for (h in prop_exp_list) {
     for (t in risk_list) {
       for (k in SE_exposed_list) {
         for (z in sample_size_list) {
-          
-          combination <- c(combination, paste0(h, "_", w, "_", t, "_", k))
+          start_iteration <- Sys.time()
+          combination <- c(combination, paste0(h, "_", w, "_", t, "_", k, "_", z))
           
           #-------------------
           # Setting parameters 
@@ -104,6 +106,11 @@ for (h in prop_exp_list) {
           # Computing test power 
           #---------------------
           source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample_parallel_parlapply.R"))
+          
+          #----------------------------------
+          # Computing PPV and RR distribution 
+          #----------------------------------
+          source(paste0(thisdir,"/06_PPV/PPV_RR_distribution_parlapply.R"))
           
           #-------------------
           # Collecting results
@@ -135,7 +142,14 @@ for (h in prop_exp_list) {
           DT_comb <- rbind(DT_comb, tmp)
           TestPower <- c(TestPower, power_of_test)
           counter <- counter + 1
-          print(paste0(counter, "/" , len))
+          fwrite(DT_PPV_RR, paste0(dirresults, 
+                                   "/DT_PPV_RR_",
+                                   combination[counter], 
+                                   ".csv"))
+          end_iteration <- Sys.time()
+          time_iteration <- end_iteration - start_iteration
+          cat(paste0(counter, "/", len), ":  ")
+          cat(time_iteration, "\n")
         }
       }
     }
@@ -145,7 +159,7 @@ for (h in prop_exp_list) {
 #---------------
 # Saving results
 #---------------
-fwrite(DT_comb, paste0(thisdir, "/05_Results/DT_",now ,  ".csv"))
+fwrite(DT_comb, paste0(dirresults, "/DT_combinations.csv"))
 Result <- data.table(Power = TestPower, combination = combination)
-fwrite(Result, paste0(thisdir, "/05_Results/Results_",now ,  ".csv"))
-save.image(paste0(thisdir, "/05_Results/env_",now , ".RData"))
+fwrite(Result, paste0(dirresults, "/Results.csv"))
+save.image(paste0(dirresults, "/env.RData"))
