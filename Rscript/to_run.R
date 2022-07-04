@@ -41,8 +41,8 @@ source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
 # Defining data parameters
 #-------------------------
 prop_exp_list    <-  c(0.05, 0.2)
-pi_ne_list       <-  c(0.01, 0.05, 0.1)
-risk_list        <-  c(0.5, 0.9, 1.1, 2)
+pi_ne_list       <-  c(0.01, 0.1)
+risk_list        <-  c(0.5, 1.1, 1.8)
 SE_exposed_list  <-  c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)
 sample_size_list <-  c(250, 500)
  
