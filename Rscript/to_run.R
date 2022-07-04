@@ -11,6 +11,11 @@ thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 setwd(thisdir)
 
+#---------------------------
+# Loading program parameters
+#---------------------------
+source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
+
 #-----------------------------------------------
 # Getting date and time, creating results folder
 #-----------------------------------------------
@@ -27,11 +32,6 @@ now <- paste0(year(Sys.time()),
 dirresults <- paste0(thisdir, "/05_Results/", now)
 suppressWarnings(if (!file.exists(dirresults)) dir.create(file.path(dirresults)))
 
-#---------------------------
-# Loading program parameters
-#---------------------------
-source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
-
 #-----------------------
 # Loading test statistic 
 #-----------------------
@@ -42,7 +42,7 @@ source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
 #-------------------------
 prop_exp_list    <-  c(0.05, 0.2)
 pi_ne_list       <-  c(0.01, 0.1)
-risk_list        <-  c(0.5, 1.1, 1.8)
+risk_list        <-  c(0.5, 1.1, 2)
 SE_exposed_list  <-  c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)
 sample_size_list <-  c(250, 500)
  
