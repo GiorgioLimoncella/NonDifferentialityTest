@@ -40,11 +40,11 @@ source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <-  c(0.05, 0.2)
-pi_ne_list       <-  c(0.01, 0.1)
-risk_list        <-  c(0.5, 1.1, 2)
-SE_exposed_list  <-  c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)
-sample_size_list <-  c(250, 500)
+prop_exp_list    <- c(0.05) #c(0.05, 0.2)
+pi_ne_list       <- c(0.01) #c(0.01, 0.1)
+risk_list        <- c(0.5) #c(0.5, 1.1, 2)
+SE_exposed_list  <- c(0.5) #c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)
+sample_size_list <- c(500) #c(250, 500)
  
 counter <- 0
 len <- length(prop_exp_list)*
@@ -105,7 +105,7 @@ for (h in prop_exp_list) {
           #---------------------
           # Computing test power 
           #---------------------
-          source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample_parallel_parlapply.R"))
+          source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample_parlapply_exp.R"))
           
           #----------------------------------
           # Computing PPV and RR distribution 
@@ -142,10 +142,10 @@ for (h in prop_exp_list) {
           DT_comb <- rbind(DT_comb, tmp)
           TestPower <- c(TestPower, power_of_test)
           counter <- counter + 1
-          fwrite(DT_PPV_RR, paste0(dirresults, 
-                                   "/DT_PPV_RR_",
-                                   combination[counter], 
-                                   ".csv"))
+          # fwrite(DT_PPV_RR, paste0(dirresults, 
+          #                          "/DT_PPV_RR_",
+          #                          combination[counter], 
+          #                          ".csv"))
           end_iteration <- Sys.time()
           time_iteration <- end_iteration - start_iteration
           cat(paste0(counter, "/", len), ":  ")
