@@ -142,10 +142,10 @@ for (h in prop_exp_list) {
           DT_comb <- rbind(DT_comb, tmp)
           TestPower <- c(TestPower, power_of_test)
           counter <- counter + 1
-          # fwrite(DT_PPV_RR, paste0(dirresults, 
-          #                          "/DT_PPV_RR_",
-          #                          combination[counter], 
-          #                          ".csv"))
+          fwrite(DT_PPV_RR, paste0(dirresults,
+                                   "/DT_PPV_RR_",
+                                   combination[counter],
+                                   ".csv"))
           end_iteration <- Sys.time()
           time_iteration <- end_iteration - start_iteration
           cat(paste0(counter, "/", len), ":  ")
