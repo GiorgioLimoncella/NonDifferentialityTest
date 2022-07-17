@@ -1,0 +1,31 @@
+---
+title: "Non Differentiality Test"
+date: "??/??/2022"
+output: 
+  rmdformats::html_clean:
+  toc: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(data.table)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+```
+
+<br><br><br>
+
+## Agenda
+
+#### Modifiche apportate alle simulazioni:
+
+- Campionamento dall'intersezione di A e B
+
+- Campionamento suddiviso per gruppi di esposizione 
+
+
+
+
+<br><br><br>
+

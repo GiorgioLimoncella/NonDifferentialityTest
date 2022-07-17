@@ -36,9 +36,9 @@ SP_B_ne          <- 0.99 #max( 1-(pi_ne*risk), (1-pi_ne)) - pi_ne/2
 
 
 ### Bootstrap parameters
-na    = z  # A sample size
-nb    = z  # B sample size
-nc    = z
+na    = z$a  # A sample size
+nb    = z$b  # B sample size
+nc    = z$c
 nsam  = 1000 # Monte Carlo rep
-nboot = z  # Bootstrap sample size
+nboot = 500  # Bootstrap sample size
 

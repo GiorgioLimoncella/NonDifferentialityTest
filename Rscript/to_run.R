@@ -40,11 +40,13 @@ source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <- c(0.05) #c(0.05, 0.2)
-pi_ne_list       <- c(0.01) #c(0.01, 0.1)
-risk_list        <- c(0.5) #c(0.5, 1.1, 2)
-SE_exposed_list  <- c(0.5) #c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)
-sample_size_list <- c(500) #c(250, 500)
+prop_exp_list    <- c(0.05, 0.2)                                     #c(0.05)
+pi_ne_list       <- c(0.01, 0.1)                                     #c(0.01)
+risk_list        <- c(0.5, 1.2, 2)                                   #c(0.5) 
+SE_exposed_list  <- c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)      #c(0.5) 
+sample_size_list <- list(list( a = 100, b = 100, c = 50),           #c(500) 
+                         list( a = 200, b = 200, c = 100),
+                         list( a = 300, b = 300, c = 150))                                     
  
 counter <- 0
 len <- length(prop_exp_list)*
@@ -90,7 +92,7 @@ for (h in prop_exp_list) {
       for (k in SE_exposed_list) {
         for (z in sample_size_list) {
           start_iteration <- Sys.time()
-          combination <- c(combination, paste0(h, "_", w, "_", t, "_", k, "_", z))
+          combination <- c(combination, paste0(h, "_", w, "_", t, "_", k, "_", z$a, "_", z$b, "_", z$c))
           
           #-------------------
           # Setting parameters 
@@ -150,6 +152,13 @@ for (h in prop_exp_list) {
           time_iteration <- end_iteration - start_iteration
           cat(paste0(counter, "/", len), ":  ")
           cat(time_iteration, "\n")
+          
+          if(counter %% 10 == 0){
+            Result <- data.table(Power = TestPower, combination = combination)
+            
+            fwrite(Result, paste0(dirresults, "/Results.csv"))
+          }
+          stop("stoppete")
         }
       }
     }
