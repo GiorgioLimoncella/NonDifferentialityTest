@@ -1,2 +1,0 @@
-prop_exp,prev_ne,risk,bias_mis,sd_mis,rmse_mis,bias_single,sd_single,rmse_single,power,SE_exp,sample_size,SE_AUB,SE_A_e,SE_B_given_A_e,SE_A_int_B_e,SE_B_e,SE_A_given_B_e,SE_B_given_not_A_e,SE_A_ne,SE_B_given_A_ne,SE_A_int_B_ne,SE_B_ne,SE_A_given_B_ne,SE_B_given_not_A_ne,SP_A_e,SP_B_e,SP_A_ne,SP_B_ne
-0.05,0.01,0.5,0.000635382776770332,0.139190052145733,0.139121890646255,-0.00710012077350858,0.153115970607547,0.153204006702288,2,0.5,100_100_50,0.9,0.5,0.8,0.4,0.8,0.5,0.8,0.5,0.8,0.4,0.8,0.5,0.8,0.99,0.99,0.99,0.99

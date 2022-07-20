@@ -181,6 +181,7 @@ for (h in prop_exp_list) {
           time_iteration <- end_iteration - start_iteration
           cat(paste0(counter, "/", len), ":  ")
           cat(time_iteration, "\n")
+          fwrite(DT_comb_RR, paste0(dirresults,"/DT_comb_RR.csv"))
         }
       }
     }
