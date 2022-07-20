@@ -35,6 +35,44 @@ PPV_A_e0=PPV_A_ne0=PPV_B_e0=PPV_B_ne0=PPV_C_e0=PPV_C_ne0=c()
 PPV_A_e2=PPV_A_ne2=PPV_B_e2=PPV_B_ne2=PPV_C_e2=PPV_C_ne2=c()
 
 
+# sample size A
+data_aggregated_A <- data[, .N, .(A, E)]
+
+na_e <- min(as.integer(na/2), data_aggregated_A[E==1 & A==1, N])
+na_ne <- min(as.integer(na/2), data_aggregated_A[E==0 & A==1, N])
+if (na_e < as.integer(na/2) & na_ne == as.integer(na/2) ) {
+  na_ne <- min(na - na_e, data_aggregated_A[E==0 & A==1, N])
+}
+if (na_e == as.integer(na/2) & na_ne < as.integer(na/2) ) {
+  na_e <- min(na - na_ne, data_aggregated_A[E==1 & A==1, N])
+}
+
+# sample size B
+data_aggregated_B <- data[, .N, .(B, E)]
+
+nb_e <- min(as.integer(nb/2), data_aggregated_B[E==1 & B==1, N])
+nb_ne <- min(as.integer(nb/2), data_aggregated_B[E==0 & B==1, N])
+if (nb_e < as.integer(nb/2) & nb_ne == as.integer(nb/2) ) {
+  nb_ne <- min(nb - nb_e, data_aggregated_B[E==0 & B==1, N])
+}
+if (nb_e == as.integer(nb/2) & nb_ne < as.integer(nb/2) ) {
+  nb_e <- min(nb - nb_ne, data_aggregated_B[E==1 & B==1, N])
+}
+
+# sample size C
+data_aggregated_C <- data[, .N, .(C, E)]
+
+nc_e <- min(as.integer(nc/2), data_aggregated_C[E==1 & C==1, N])
+nc_ne <- min(as.integer(nc/2), data_aggregated_C[E==0 & C==1, N])
+if (nc_e < as.integer(nc/2) & nc_ne == as.integer(nc/2) ) {
+  nc_ne <- min(nc - nc_e, data_aggregated_C[E==0 & C==1, N])
+}
+if (nc_e == as.integer(nc/2) & nc_ne < as.integer(nc/2) ) {
+  nc_e <- min(nc - nc_ne, data_aggregated_C[E==1 & C==1, N])
+}
+
+
+
 for(i in 1:nsam){
   
   sam_Ya1 = DT_A[sample(nrow(DT_A),na),]

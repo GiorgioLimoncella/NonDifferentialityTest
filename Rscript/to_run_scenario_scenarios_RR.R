@@ -29,25 +29,27 @@ now <- paste0(year(Sys.time()),
               "-",
               minute(Sys.time()))
 
-dirresults <- paste0(thisdir, "/05_Results/", now)
+dirresults <- paste0(thisdir, "/05_Results/", now, "_RR")
 suppressWarnings(if (!file.exists(dirresults)) dir.create(file.path(dirresults)))
 
-#-----------------------
-# Loading test statistic 
-#-----------------------
+#--------------------------------------
+# Loading test statistic and functions
+#--------------------------------------
 source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
+source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <-   c(0.05) #c(0.05, 0.2)                                     #c(0.05)
-pi_ne_list       <-   c(0.01) #c(0.01, 0.1)                                     #c(0.01)
-risk_list        <-   c(0.5)  #c(0.5, 1.2, 2)                                   #c(0.5) 
-SE_exposed_list  <-   c(0.5)  #c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)      #c(0.5) 
-sample_size_list <-  list(list( a = 100, b = 100, c = 50))  #list(list( a = 100, b = 100, c = 50),           #c(500) 
-                    #     list( a = 200, b = 200, c = 100),
-                    #     list( a = 300, b = 300, c = 150))                                     
- 
+prop_exp_list    <-   c(0.05, 0.2)                                     
+pi_ne_list       <-   c(0.01, 0.1)                                     
+risk_list        <-   c(0.5, 1.2, 2)                                    
+SE_exposed_list  <-   c(0.70, 0.80, 0.90)      
+sample_size_list <-  list(list( a = 100, b = 100, c = 50),   
+                          list( a = 200, b = 200, c = 100))
+#     list( a = 300, b = 300, c = 150))                                     
+
+
 counter <- 0
 len <- length(prop_exp_list)*
   length(pi_ne_list)*
@@ -58,11 +60,17 @@ len <- length(prop_exp_list)*
 TestPower <- c()
 combination <- c()
 
-DT_comb <- data.table(prop_exp = integer(0),
+DT_comb_RR <- data.table(prop_exp = integer(0),
                       prev_ne = integer(0),
                       risk = integer(0),
-                      SE_exp = integer(0),
+                      bias_mis = integer(0),
+                      sd_mis = integer(0),
+                      rmse_mis =integer(0),
+                      bias_single = integer(0),
+                      sd_single = integer(0),
+                      rmse_single =integer(0),
                       power = integer(0),
+                      SE_exp = integer(0),
                       sample_size = integer(0),
                       SE_AUB = integer(0),           
                       SE_A_e = integer(0),          
@@ -97,23 +105,42 @@ for (h in prop_exp_list) {
           #-------------------
           # Setting parameters 
           #-------------------
-          source(paste0(thisdir,"/01_Parameters/TestParameters_hwtkz.R"))
+          source(paste0(thisdir,"/01_Parameters/TestParameters_hwtkz_scenarios.R"))
           
           #-------------
           # Loading data
           #-------------
           source(paste0(thisdir,"/03_DataGen/ConditionalProbability_sample_strata_exp.R"))
           
-          #---------------------
-          # Computing test power 
-          #---------------------
-          source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample_parlapply_exp.R"))
+          #-----------------
+          # RR distribution 
+          #-----------------
+          source(paste0(thisdir,"/07_RR/RiskRatio_MC_distribution_with_C_sample_exp.R"))
           
-          #----------------------------------
-          # Computing PPV and RR distribution 
-          #----------------------------------
-          source(paste0(thisdir,"/06_PPV/PPV_RR_distribution_parlapply.R"))
+          #multiple indicator
+          # plt_RR
+          # mean(RR_est) 
+          # sqrt(var(RR_est))
           
+          #single indicator
+          # plt_RR_single_indicator
+          # mean(RR_single_indicator) 
+          # sqrt(var(RR_single_indicator))
+          # #ggsave(paste0(thisdir, "/09_Figures/RR_scenario1.png"))
+          
+          #--------------------------
+          # Non Differentiality test 
+          #--------------------------
+          
+          ### Bootstrap single test 
+          source(paste0(thisdir,"/04_TestApplication/BootTest_with_C_sample_exp.R"))
+          #plt_test
+          #ggsave(paste0(thisdir, "/09_Figures/Test_scenario1.png"))
+          
+          ### Test Power
+          #source(paste0(thisdir,"/04_TestApplication/TestPower_with_C_sample_parlapply_exp.R"))
+          #power_of_test 
+          power_of_test = 2
           #-------------------
           # Collecting results
           #-------------------
@@ -121,6 +148,12 @@ for (h in prop_exp_list) {
                             prev_ne = w,
                             risk = t,
                             SE_exp = k, 
+                            bias_mis = mean(RR_est) - t,
+                            sd_mis = sqrt(var(RR_est)),
+                            rmse_mis = rmse_RR_multiple,
+                            bias_single = mean(RR_single_indicator) - t,
+                            sd_single = sqrt(var(RR_single_indicator)),
+                            rmse_single = rmse_RR_single,
                             power = power_of_test,
                             sample_size = paste0(z$a, "_", z$b, "_", z$c),
                             SE_AUB = SE_AUB,           
@@ -141,34 +174,18 @@ for (h in prop_exp_list) {
                             SP_A_ne = SP_A_ne,         
                             SP_B_ne = SP_B_ne)
           
-          DT_comb <- rbind(DT_comb, tmp)
-          TestPower <- c(TestPower, power_of_test)
+          DT_comb_RR <- rbind(DT_comb_RR, tmp)
           counter <- counter + 1
-          fwrite(DT_PPV_RR, paste0(dirresults,
-                                   "/DT_PPV_RR_",
-                                   combination[counter],
-                                   ".csv"))
+
           end_iteration <- Sys.time()
           time_iteration <- end_iteration - start_iteration
           cat(paste0(counter, "/", len), ":  ")
           cat(time_iteration, "\n")
-          
-          if(counter %% 10 == 0){
-            Result <- data.table(Power = TestPower, combination = combination)
-            
-            fwrite(Result, paste0(dirresults, "/Results.csv"))
-          }
-          stop("stoppete")
         }
       }
     }
   }
 }
 
-#---------------
-# Saving results
-#---------------
-fwrite(DT_comb, paste0(dirresults, "/DT_combinations.csv"))
-Result <- data.table(Power = TestPower, combination = combination)
-fwrite(Result, paste0(dirresults, "/Results.csv"))
-save.image(paste0(dirresults, "/env.RData"))
+
+fwrite(DT_comb_RR, paste0(dirresults,"/DT_comb_RR.csv"))
