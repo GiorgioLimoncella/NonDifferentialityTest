@@ -44,7 +44,7 @@ source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 prop_exp_list    <-   c(0.05, 0.2)                                     
 pi_ne_list       <-   c(0.01, 0.1)                                     
 risk_list        <-   c(0.5, 1.2, 2)                                    
-SE_exposed_list  <-   c(0.70, 0.80, 0.90)      
+SE_exposed_list  <-   c(0.60, 0.65, 0.75)      
 sample_size_list <-  list(list( a = 100, b = 100, c = 50),   
                           list( a = 200, b = 200, c = 100))
 #     list( a = 300, b = 300, c = 150))                                     
