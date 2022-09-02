@@ -3,8 +3,8 @@
 #---------------------------------
 list_of_original_samples <- vector(mode = "list")
 
-cores <- detectCores()
-cl <- makeCluster(cores[1]-1)
+#cores <- detectCores()
+cl <- makeCluster(n_of_core_to_be_used)
 registerDoParallel(cl)
 list_of_samples <- foreach(1:nsam, .packages='data.table') %dopar% {
   
@@ -111,8 +111,8 @@ boot_function <- function(list_of_original_samples){
 #-----------------------------------------------------------------------------
 # Appling boot_function to list_of_samples and computing the power of the test
 #-----------------------------------------------------------------------------
-cores <- detectCores()
-cl <- makeCluster(cores[1]- 1)
+#cores <- detectCores()
+cl <- makeCluster(n_of_core_to_be_used)
 clusterExport(cl = cl, list("boot_function", 
                             "nboot", 
                             "list_of_samples", 

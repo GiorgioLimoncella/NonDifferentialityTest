@@ -1,6 +1,7 @@
-################################################################################
-###############    Non-Differentiality Test: Simulated Data     ################
-################################################################################
+#--------------------------------------
+# Non-Differentiality Test: HPC- script
+#--------------------------------------
+
 rm(list=ls(all.names=TRUE))
 
 #------------------------------
@@ -15,6 +16,12 @@ setwd(thisdir)
 # Loading program parameters
 #---------------------------
 source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
+
+#--------------------
+# Setting the cluster
+#--------------------
+n_of_core_to_be_used <- 2
+setDTthreads(n_of_core_to_be_used)
 
 #-----------------------------------------------
 # Getting date and time, creating results folder
@@ -40,13 +47,13 @@ source(paste0(thisdir,"/02_TestFunctions/TestStatistic.R"))
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <-   c(0.05) #c(0.05, 0.2)                                     #c(0.05)
-pi_ne_list       <-   c(0.01) #c(0.01, 0.1)                                     #c(0.01)
-risk_list        <-   c(0.5)  #c(0.5, 1.2, 2)                                   #c(0.5) 
-SE_exposed_list  <-   c(0.5)  #c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)      #c(0.5) 
-sample_size_list <-  list(list( a = 100, b = 100, c = 50))  #list(list( a = 100, b = 100, c = 50),           #c(500) 
-                    #     list( a = 200, b = 200, c = 100),
-                    #     list( a = 300, b = 300, c = 150))                                     
+prop_exp_list    <-   c(0.05, 0.2)                                   
+pi_ne_list       <-   c(0.01, 0.1)                                     
+risk_list        <-   c( 1.2, 2)                                    
+SE_exposed_list  <-   c(0.15, 0.30, 0.40, 0.50, 0.60, 0.70, 0.85)      
+sample_size_list <-   list(list( a = 100, b = 100, c = 50),           
+                         list( a = 200, b = 200, c = 100),
+                         list( a = 300, b = 300, c = 150))                                     
  
 counter <- 0
 len <- length(prop_exp_list)*
@@ -158,7 +165,6 @@ for (h in prop_exp_list) {
             
             fwrite(Result, paste0(dirresults, "/Results.csv"))
           }
-          stop("stoppete")
         }
       }
     }
@@ -170,5 +176,8 @@ for (h in prop_exp_list) {
 #---------------
 fwrite(DT_comb, paste0(dirresults, "/DT_combinations.csv"))
 Result <- data.table(Power = TestPower, combination = combination)
+if (length(TestPower) != length(combination)) {
+  warning("Result: length(TestPower) != length(combination)")
+}
 fwrite(Result, paste0(dirresults, "/Results.csv"))
 save.image(paste0(dirresults, "/env.RData"))

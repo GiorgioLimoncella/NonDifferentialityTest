@@ -26,7 +26,7 @@
 # list_of_original_samples <- vector(mode = "list")
 # 
 # cores <- detectCores()
-# cl <- makeCluster(cores[1]-1)
+# cl <- makeCluster()
 # registerDoParallel(cl)
 # list_of_samples <- foreach(1:nsam) %dopar%{
 #   list_of_original_samples[["A"]] = DT_A[sample(nrow(DT_A),na),]
@@ -67,8 +67,8 @@ PPV_RR_function <- function(list_of_samples){
 #--------------------------------------------------------------------------------
 # Appling PPV_RR_function to list_of_samples and computing PPV & RR distributions
 #--------------------------------------------------------------------------------
-cores <- detectCores()
-cl <- makeCluster(cores[1]- 1)
+#cores <- detectCores()
+cl <- makeCluster(n_of_core_to_be_used)
 clusterExport(cl = cl, list("PPV_RR_function",  
                             "list_of_samples", 
                             "data.table",
