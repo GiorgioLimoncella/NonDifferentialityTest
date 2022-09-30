@@ -10,7 +10,7 @@ SE_AUB           <- 0.90
 
 
 ### validation indices: E=0 & Y=1
-SE_A_ne          <- 0.5
+SE_A_ne          <- k$ne
 SE_B_given_A_ne  <- s
 
 SE_A_int_B_ne       <- SE_A_ne * SE_B_given_A_ne
@@ -20,8 +20,8 @@ SE_B_given_not_A_ne <- (SE_B_ne - SE_A_int_B_ne) / (1 - SE_A_ne)
 
 
 ### validation indices: E=1 & Y=1
-SE_A_e           <- k * SE_A_ne
-SE_B_given_A_e   <- SE_B_given_A_ne/(k*6)
+SE_A_e           <- k$e
+SE_B_given_A_e   <- s
 
 SE_A_int_B_e       <- SE_A_e * SE_B_given_A_e
 SE_B_e             <- SE_AUB - SE_A_e + SE_A_int_B_e

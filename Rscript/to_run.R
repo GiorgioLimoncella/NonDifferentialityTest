@@ -20,7 +20,7 @@ source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
 #--------------------
 # Setting the cluster
 #--------------------
-n_of_core_to_be_used <- 32
+n_of_core_to_be_used <- 7
 setDTthreads(n_of_core_to_be_used)
 
 #-----------------------------------------------
@@ -49,12 +49,20 @@ source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <- c(0.2)                                     #c(0.05)
-pi_ne_list       <- c(0.01, 0.1)                                     #c(0.01)
-risk_list        <- c(0.5, 1.2, 2)                                   #c(0.5) 
-SE_ratio_list <-   c( 0.4, 0.8, 1, 1.2, 1.6)      #c(0.5) 
+prop_exp_list    <- c(0.05, 0.2, 0.5)                                     
+pi_ne_list       <- c(0.01, 0.1)                                     
+risk_list        <- c(1.2, 2)                                   
+sensitivity_list <-  list(list( e = 0.2858, ne = 0.7142),       # 0.4        
+                          list( e = 0.375,  ne = 0.625),         # 0.6
+                          list( e = 0.4445, ne = 0.5555),       # 0.8      
+                          list( e = 0.5,    ne = 0.5),             # 1
+                          list( e = 0.545,  ne = 0.454),         # 1.2
+                          list( e = 0.5833, ne = 0.4166),       # 1.4
+                          list( e = 0.6155, ne = 0.3845))       # 1.6  
+
 P_B_given_A_list <- c(0.15, 0.3, 0.5)
-sample_size_list <-  list(list( a = 100, b = 100, c = 50),           #c(500) 
+
+sample_size_list <-  list(list( a = 100, b = 100, c = 50),           
                           list( a = 200, b = 200, c = 100),
                           list( a = 300, b = 300, c = 150))                                     
 
@@ -62,8 +70,9 @@ counter <- 0
 len <- length(prop_exp_list)*
   length(pi_ne_list)*
   length(risk_list)*
-  length(SE_ratio_list)*
-  length(sample_size_list)
+  length(sensitivity_list)*
+  length(sample_size_list)*
+  length(P_B_given_A_list)
 
 TestPower <- c()
 combination <- c()
@@ -99,7 +108,7 @@ DT_comb <- data.table(prop_exp = integer(0),
 for (h in prop_exp_list) {
   for (w in pi_ne_list) {
     for (t in risk_list) {
-      for (k in SE_ratio_list) {
+      for (k in sensitivity_list) {
         for (z in sample_size_list) {
           for (s in P_B_given_A_list) {
             
@@ -132,17 +141,17 @@ for (h in prop_exp_list) {
             tmp <- data.table(prop_exp = h,
                               prev_ne = w,
                               risk = t,
-                              SE_ratio = k, 
+                              SE_ratio = round(k$e / k$ne, digits = 2),
                               power = power_of_test,
                               sample_size = paste0(z$a, "_", z$b, "_", z$c),
                               SE_AUB = SE_AUB,           
-                              SE_A_e = SE_A_e,          
+                              SE_A_e = k$e,          
                               SE_B_given_A_e  = SE_B_given_A_e,  
                               SE_A_int_B_e = SE_A_int_B_e,       
                               SE_B_e = SE_B_e,             
                               SE_A_given_B_e = SE_A_given_B_e ,     
                               SE_B_given_not_A_e = SE_B_given_not_A_e, 
-                              SE_A_ne = SE_A_ne,          
+                              SE_A_ne = k$ne,          
                               SE_B_given_A_ne = SE_B_given_A_ne,  
                               SE_A_int_B_ne = SE_A_int_B_ne,      
                               SE_B_ne = SE_B_ne,            
