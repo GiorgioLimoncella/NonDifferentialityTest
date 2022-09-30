@@ -62,11 +62,11 @@ boot_function <- function(list_of_original_samples){
                           PPV_B_e_tmp,  1/(2*sum(boot_sample_tmp_B$B==1 &  boot_sample_tmp_B$E==1)))
     
     # C=1 & E=1
-    PPV_C_e_tmp = (sum(boot_sample_tmp_C$C==1 & boot_sample_tmp_C$Y==1 & boot_sample_tmp_C$E==0)) / 
+    PPV_C_e_tmp = (sum(boot_sample_tmp_C$C==1 & boot_sample_tmp_C$Y==1 & boot_sample_tmp_C$E==1)) / 
       (sum(boot_sample_tmp_C$C==1 & boot_sample_tmp_C$E==0))
     
     PPV_C_e_tmp = ifelse(PPV_C_e_tmp>0 & (!is.na(PPV_C_e_tmp)) & PPV_C_e_tmp != Inf,
-                          PPV_C_e_tmp,  1/(2*sum(boot_sample_tmp_C$C==1 & boot_sample_tmp_C$E==0)))
+                          PPV_C_e_tmp,  1/(2*sum(boot_sample_tmp_C$C==1 & boot_sample_tmp_C$E==1)))
     # A=1 & E=0
     PPV_A_ne_tmp = (sum(boot_sample_tmp_A$A==1 & boot_sample_tmp_A$Y==1 & boot_sample_tmp_A$E==0)) / 
       (sum(boot_sample_tmp_A$A==1 & boot_sample_tmp_A$E==0))
