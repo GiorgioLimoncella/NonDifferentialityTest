@@ -20,7 +20,7 @@ source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
 #--------------------
 # Setting the cluster
 #--------------------
-n_of_core_to_be_used <- 7
+n_of_core_to_be_used <- 10
 setDTthreads(n_of_core_to_be_used)
 
 #-----------------------------------------------
@@ -49,22 +49,22 @@ source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <- c(0.05, 0.2, 0.5)                                     
+prop_exp_list    <- c(0.2) #c(0.05, 0.2, 0.5)                                     
 pi_ne_list       <- c(0.01, 0.1)                                     
 risk_list        <- c(1.2, 2)                                   
-sensitivity_list <-  list(list( e = 0.2858, ne = 0.7142),       # 0.4        
-                          list( e = 0.375,  ne = 0.625),         # 0.6
+sensitivity_list <-  list(#list( e = 0.2858, ne = 0.7142),       # 0.4        
+                          #list( e = 0.375,  ne = 0.625),         # 0.6
                           list( e = 0.4445, ne = 0.5555),       # 0.8      
                           list( e = 0.5,    ne = 0.5),             # 1
-                          list( e = 0.545,  ne = 0.454),         # 1.2
-                          list( e = 0.5833, ne = 0.4166),       # 1.4
-                          list( e = 0.6155, ne = 0.3845))       # 1.6  
+                          list( e = 0.545,  ne = 0.454))#,         # 1.2
+                          #list( e = 0.5833, ne = 0.4166),       # 1.4
+                          #list( e = 0.6155, ne = 0.3845))       # 1.6  
 
 P_B_given_A_list <- c(0.15, 0.3, 0.5)
 
-sample_size_list <-  list(list( a = 100, b = 100, c = 50),           
-                          list( a = 200, b = 200, c = 100),
-                          list( a = 300, b = 300, c = 150))                                     
+sample_size_list <-  list(#list( a = 100, b = 100, c = 50),           
+                          list( a = 200, b = 200, c = 100))#,
+                          #list( a = 300, b = 300, c = 150))                                     
 
 counter <- 0
 len <- length(prop_exp_list)*
@@ -113,7 +113,7 @@ for (h in prop_exp_list) {
           for (s in P_B_given_A_list) {
             
             start_iteration <- Sys.time()
-            combination <- c(combination, paste0(h, "_", w, "_", t, "_", k, "_", z$a, "_", z$b, "_", z$c))
+            combination <- c(combination, paste0(h, "_", w, "_", t, "_", k$e, "_", k$ne, "_", z$a, "_", z$b, "_", z$c))
             
             #-------------------
             # Setting parameters 
@@ -171,6 +171,7 @@ for (h in prop_exp_list) {
                                      ".csv"))
             end_iteration <- Sys.time()
             time_iteration <- end_iteration - start_iteration
+            cat("Iteration:    Power        (time elapsed)    \n")
             cat(paste0(counter, "/", len), ":  ", power_of_test, " (")
             cat(time_iteration, ") \n")
             
