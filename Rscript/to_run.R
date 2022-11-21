@@ -49,22 +49,33 @@ source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <- c(0.2) #c(0.05, 0.2, 0.5)                                     
+prop_exp_list    <- c(0.05, 0.2)                                     
 pi_ne_list       <- c(0.01, 0.1)                                     
-risk_list        <- c(1.2, 2)                                   
-sensitivity_list <-  list(#list( e = 0.2858, ne = 0.7142),       # 0.4        
-                          #list( e = 0.375,  ne = 0.625),         # 0.6
-                          list( e = 0.4445, ne = 0.5555),       # 0.8      
-                          list( e = 0.5,    ne = 0.5),             # 1
-                          list( e = 0.545,  ne = 0.454))#,         # 1.2
-                          #list( e = 0.5833, ne = 0.4166),       # 1.4
-                          #list( e = 0.6155, ne = 0.3845))       # 1.6  
+risk_list        <- c(1.2, 2)  
 
-P_B_given_A_list <- c(0.15, 0.3, 0.5, 0.9)
+# sensitivity_list <-  list(list( e = 0.2858, ne = 0.7142),       # 0.4        
+#                           list( e = 0.375,  ne = 0.625),        # 0.6
+#                           list( e = 0.4445, ne = 0.5555),       # 0.8      
+#                           list( e = 0.5,    ne = 0.5),          # 1
+#                           list( e = 0.545,  ne = 0.454),        # 1.2
+#                           list( e = 0.5833, ne = 0.4166),       # 1.4
+#                           list( e = 0.6155, ne = 0.3845))       # 1.6  
 
-sample_size_list <-  list(#list( a = 100, b = 100, c = 50),           
-                          list( a = 200, b = 200, c = 100))#,
-                          #list( a = 300, b = 300, c = 150))                                     
+
+sensitivity_list <-  list(list(e = 0.2, ne = 0.5),       # 0.4        
+                          list(e = 0.3, ne = 0.5),       # 0.6
+                          list(e = 0.4, ne = 0.5),       # 0.8      
+                          list(e = 0.5, ne = 0.5),       # 1
+                          list(e = 0.6, ne = 0.5),       # 1.2
+                          list(e = 0.7, ne = 0.5),       # 1.4
+                          list(e = 0.8, ne = 0.5))       # 1.6  
+
+
+P_A_int_B_list <- c(0.1, 0.25, 0.5)
+
+sample_size_list <-  list(list(a = 100, b = 100, c = 50),           
+                          list(a = 200, b = 200, c = 100),
+                          list(a = 300, b = 300, c = 150))                                     
 
 counter <- 0
 len <- length(prop_exp_list)*
@@ -72,7 +83,7 @@ len <- length(prop_exp_list)*
   length(risk_list)*
   length(sensitivity_list)*
   length(sample_size_list)*
-  length(P_B_given_A_list)
+  length(P_A_int_B_list)
 
 TestPower <- c()
 combination <- c()
@@ -112,7 +123,11 @@ for (h in prop_exp_list) {
     for (t in risk_list) {
       for (k in sensitivity_list) {
         for (z in sample_size_list) {
-          for (s in P_B_given_A_list) {
+          for (s in P_A_int_B_list) {
+            
+            if(counter == 0){
+              cat("Iteration:    Power    (time elapsed)    \n")
+            }
             
             start_iteration <- Sys.time()
             combination <- c(combination, paste0(h, "_", w, "_", t, "_", k$e, "_", k$ne, "_", z$a, "_", z$b, "_", z$c))
@@ -185,7 +200,7 @@ for (h in prop_exp_list) {
               
               fwrite(Result, paste0(dirresults, "/Results.csv"))
             }
-            #stop("stoppete")
+            #stop("stop")
           }
         }
       }
@@ -203,3 +218,17 @@ if (length(TestPower) != length(combination)) {
 }
 fwrite(Result, paste0(dirresults, "/Results.csv"))
 #save.image(paste0(dirresults, "/env.RData"))
+
+
+#---------------
+
+#Note 
+
+# invece di fissare SE di B|A:
+# 1. set SE_ AUB
+# 2. imposta SE di A e SE_ A int B
+# 3. ricava SE di B
+
+# metti in chiaro che le SP sono indipendenti dato Y (per semplificare)
+
+
