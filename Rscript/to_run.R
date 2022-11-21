@@ -20,7 +20,7 @@ source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
 #--------------------
 # Setting the cluster
 #--------------------
-n_of_core_to_be_used <- 6
+n_of_core_to_be_used <- 10
 setDTthreads(n_of_core_to_be_used)
 
 #-----------------------------------------------
@@ -51,7 +51,7 @@ source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 #-------------------------
 prop_exp_list    <- c(0.05, 0.2)                                     
 pi_ne_list       <- c(0.01, 0.1)                                     
-risk_list        <- c(1.2, 2)  
+risk_list        <- c(1.2)#, 2)  
 
 # sensitivity_list <-  list(list( e = 0.2858, ne = 0.7142),       # 0.4        
 #                           list( e = 0.375,  ne = 0.625),        # 0.6
@@ -62,16 +62,16 @@ risk_list        <- c(1.2, 2)
 #                           list( e = 0.6155, ne = 0.3845))       # 1.6  
 
 
-sensitivity_list <-  list(list(e = 0.2, ne = 0.5),       # 0.4        
+sensitivity_list <-  list(#list(e = 0.2, ne = 0.5),       # 0.4        
                           list(e = 0.3, ne = 0.5),       # 0.6
                           list(e = 0.4, ne = 0.5),       # 0.8      
                           list(e = 0.5, ne = 0.5),       # 1
                           list(e = 0.6, ne = 0.5),       # 1.2
-                          list(e = 0.7, ne = 0.5),       # 1.4
-                          list(e = 0.8, ne = 0.5))       # 1.6  
+                          list(e = 0.7, ne = 0.5))#,       # 1.4
+                          #list(e = 0.8, ne = 0.5))       # 1.6  
 
 
-P_A_int_B_list <- c(0.1, 0.25, 0.5)
+P_A_int_B_list <- c(0.1, 0.3)#, 0.5)
 
 sample_size_list <-  list(list(a = 100, b = 100, c = 50),           
                           list(a = 200, b = 200, c = 100),
@@ -130,7 +130,11 @@ for (h in prop_exp_list) {
             }
             
             start_iteration <- Sys.time()
-            combination <- c(combination, paste0(h, "_", w, "_", t, "_", k$e, "_", k$ne, "_", z$a, "_", z$b, "_", z$c))
+            combination <- c(combination, paste0(h, "_", 
+                                                 w, "_", 
+                                                 t, "_", 
+                                                 k$e, "_", k$ne, "_", 
+                                                 z$a, "_", z$b, "_", z$c))
             
             #-------------------
             # Setting parameters 
@@ -189,10 +193,10 @@ for (h in prop_exp_list) {
             end_iteration <- Sys.time()
             time_iteration <- end_iteration - start_iteration
             if(counter %% 10 == 0){
-              cat("Iteration:    Power    (time elapsed)    \n")
+              cat(" Iteration:  Power (time elapsed)    \n")
             }
             
-            cat(paste0(counter, "/", len), "    :  ", power_of_test, " (")
+            cat(paste0(counter, "/", len), "    :  ", power_of_test, " ( ")
             cat(time_iteration, ") \n")
             
             if(counter %% 10 == 0){
