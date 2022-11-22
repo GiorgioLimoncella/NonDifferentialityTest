@@ -1,5 +1,5 @@
 ### starting parameters
-N        <- 200000
+N        <- 500000
 prop_exp <- h
 pi_ne    <- w
 risk     <- t
