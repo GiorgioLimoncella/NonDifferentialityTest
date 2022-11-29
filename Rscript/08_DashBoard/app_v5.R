@@ -45,7 +45,7 @@ ui <- fluidPage( theme = shinytheme("flatly"),
                                       HTML("Please select the following parameters:"),
                                       HTML("<br><br>"),
                                       selectInput("prop_exp", "Proportion of exposed",
-                                                   c(0.1, 0.2)),
+                                                   c(0.05, 0.1, 0.2)),
                                        
                                       selectInput("sample_size", "Sample size",
                                                  c("100_100_50",
