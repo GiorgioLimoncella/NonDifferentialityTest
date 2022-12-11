@@ -47,3 +47,25 @@ statistic_with_C_sample <- function(P_A_e,
   
   return(TX)
 }
+
+
+
+statistic_with_C_empty <- function(P_A_e, 
+                                    P_B_e, 
+                                    P_A_ne, 
+                                    P_B_ne, 
+                                    PPV_A_e, 
+                                    PPV_B_e, 
+                                    PPV_A_ne,
+                                    PPV_B_ne){
+  
+  TA_e <- P_A_e * PPV_A_e
+  TA_ne <- P_A_ne * PPV_A_ne
+  TB_e <- P_B_e * PPV_B_e
+  TB_ne <- P_B_ne * PPV_B_ne
+  
+  
+  TX = ((TA_e * (TA_ne + TB_ne)) / (TA_ne * (TA_e + TB_e))) -1
+  
+  return(TX)
+}

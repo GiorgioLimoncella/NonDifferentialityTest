@@ -138,6 +138,11 @@ data[E==1 & Y==0 & A==1 & is.na(B), B:= 0]
 
 data <- data[, -c("i")]
 
+
+if (SE_A_int_B_e == 0 ){
+  data[A == 1, B := 0]
+}
+
 data_E_Y_A_B <- data[ ,.N, by=.(Y, E, A, B)][order(Y, E, A, B)]
 
 
@@ -210,13 +215,16 @@ if (nb_e == as.integer(nb/2) & nb_ne < as.integer(nb/2) ) {
 }
 
 # sample size C
-data_aggregated_C <- data[, .N, .(C, E)]
+if (SE_A_int_B_e > 0){
+  data_aggregated_C <- data[, .N, .(C, E)]
+  
+  nc_e <- min(as.integer(nc/2), data_aggregated_C[E==1 & C==1, N])
+  nc_ne <- min(as.integer(nc/2), data_aggregated_C[E==0 & C==1, N])
+  if (nc_e < as.integer(nc/2) & nc_ne == as.integer(nc/2) ) {
+    nc_ne <- min(nc - nc_e, data_aggregated_C[E==0 & C==1, N])
+  }
+  if (nc_e == as.integer(nc/2) & nc_ne < as.integer(nc/2) ) {
+    nc_e <- min(nc - nc_ne, data_aggregated_C[E==1 & C==1, N])
+  }
+}
 
-nc_e <- min(as.integer(nc/2), data_aggregated_C[E==1 & C==1, N])
-nc_ne <- min(as.integer(nc/2), data_aggregated_C[E==0 & C==1, N])
-if (nc_e < as.integer(nc/2) & nc_ne == as.integer(nc/2) ) {
-  nc_ne <- min(nc - nc_e, data_aggregated_C[E==0 & C==1, N])
-}
-if (nc_e == as.integer(nc/2) & nc_ne < as.integer(nc/2) ) {
-  nc_e <- min(nc - nc_ne, data_aggregated_C[E==1 & C==1, N])
-}

@@ -20,7 +20,7 @@ source(paste0(thisdir,"/01_Parameters/ProgramParameters.R"))
 #--------------------
 # Setting the cluster
 #--------------------
-n_of_core_to_be_used <- 30
+n_of_core_to_be_used <- 6
 setDTthreads(n_of_core_to_be_used)
 
 #-----------------------------------------------
@@ -49,7 +49,7 @@ source(paste0(thisdir,"/02_TestFunctions/RiskRatio_estimator.R"))
 #-------------------------
 # Defining data parameters
 #-------------------------
-prop_exp_list    <- c(0.1, 0.2)                                     
+prop_exp_list    <- c(0.05, 0.2)                                     
 pi_ne_list       <- c(0.01, 0.1)                                     
 risk_list        <- c(1.2, 2)  
 
@@ -71,7 +71,7 @@ sensitivity_list <-  list(#list(e = 0.2, ne = 0.5),       # 0.4
                           #list(e = 0.8, ne = 0.5))       # 1.6  
 
 
-P_A_int_B_list <- c(0.2, 0.4)
+P_A_int_B_list <- c(0, 0.2, 0.4)
 
 sample_size_list <-  list(list(a = 100, b = 100, c = 50),  
                           list(a = 300, b = 300, c = 150))                                     
@@ -133,7 +133,7 @@ for (h in prop_exp_list) {
                                                  w, "_", 
                                                  t, "_", 
                                                  k$e, "_", k$ne, "_", 
-                                                 z$a, "_", z$b, "_", z$c, 
+                                                 z$a, "_", z$b, "_", z$c, "_",
                                                  s))
             
             #-------------------

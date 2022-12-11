@@ -6,7 +6,7 @@ risk     <- t
 pi_e     <- pi_ne*risk
 
 ### validation indices: SE_AUB
-SE_AUB           <- 0.70
+SE_AUB           <- 0.80
 
 
 ### validation indices: E=0 & Y=1
