@@ -35,8 +35,8 @@ SP_A_e           <- 0.99 #max( 1-(pi_ne*risk), (1-pi_ne))
 SP_B_e           <- 0.99 #max( 1-(pi_ne*risk), (1-pi_ne)) - pi_ne/2
 
 ### validation indices: E=0 & Y=0
-SP_A_ne          <- 0.99 #max( 1-(pi_ne*risk), (1-pi_ne))
-SP_B_ne          <- 0.99 #max( 1-(pi_ne*risk), (1-pi_ne)) - pi_ne/2
+SP_A_ne          <- 1 - (pi_ne / 10) #max( 1-(pi_ne*risk), (1-pi_ne))
+SP_B_ne          <- 1 - pi_ne        #max( 1-(pi_ne*risk), (1-pi_ne)) - pi_ne/2
 
 
 ### Bootstrap parameters

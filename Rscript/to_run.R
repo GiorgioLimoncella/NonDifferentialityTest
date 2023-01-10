@@ -224,15 +224,4 @@ fwrite(Result, paste0(dirresults, "/Results.csv"))
 #save.image(paste0(dirresults, "/env.RData"))
 
 
-#---------------
-
-#Note 
-
-# invece di fissare SE di B|A:
-# 1. set SE_ AUB
-# 2. imposta SE di A e SE_ A int B
-# 3. ricava SE di B
-
-# metti in chiaro che le SP sono indipendenti dato Y (per semplificare)
-
 

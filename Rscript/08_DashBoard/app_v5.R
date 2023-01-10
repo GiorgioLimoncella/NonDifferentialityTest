@@ -22,7 +22,7 @@ thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 setwd(thisdir)
 
-last_results <- "/../05_Results/2022-11-22_11-27/DT_combinations.csv"
+last_results <- "/../05_Results/2022-12-1_18-13/DT_combinations.csv"
 DT <- fread(paste0(thisdir, last_results))
 #DT_tmp <- fread(paste0(thisdir, "/../05_Results/2022-11-21_10-1/DT_combinations_2.csv"))
 #DT <- rbind(DT, DT_tmp)
@@ -45,7 +45,7 @@ ui <- fluidPage( theme = shinytheme("flatly"),
                                       HTML("Please select the following parameters:"),
                                       HTML("<br><br>"),
                                       selectInput("prop_exp", "Proportion of exposed",
-                                                   c(0.05, 0.1, 0.2)),
+                                                   c(0.05, 0.2)),
                                        
                                       selectInput("sample_size", "Sample size",
                                                  c("100_100_50",
@@ -58,7 +58,7 @@ ui <- fluidPage( theme = shinytheme("flatly"),
                                                   c(1.2, 2)),
                                       
                                       selectInput("SE_B_int_A_e", "SE B int A",
-                                                  c(0.2, 0.4))
+                                                  c(0, 0.2, 0.4))
                          ),
                 
                 # Show a plot of the generated distribution
@@ -165,13 +165,13 @@ server <- function(input, output) {
     
       # selected <- paste0("0.1_", input$prev_ne_PPV, "_", input$risk_PPV)
       # DT_selected_PPV <- DT_PPV[combination==selected]
-      DT_selected_PPV <- fread(paste0(thisdir, "/../05_Results/2022-11-22_11-27/DT_PPV_RR_",
+      DT_selected_PPV <- fread(paste0(thisdir, "/../05_Results/2022-12-1_18-13/DT_PPV_RR_",
                                       input$prop_exp,"_",
                                       input$prev_ne,"_",
                                       input$risk, "_", 
                                       tmp,  "_",
                                       "0.5_",
-                                      input$sample_size,
+                                      input$sample_size,"_",
                                       input$SE_B_int_A_e,
                                       ".csv"))
       
