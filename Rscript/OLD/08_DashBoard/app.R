@@ -17,13 +17,19 @@ library(plotly)
 #setDTthreads(2)
 
 ### Setting the working directory
-if (!require("rstudioapi")) install.packages("rstudioapi")
-thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-setwd(thisdir)
+# if (!require("rstudioapi")) install.packages("rstudioapi")
+# thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+# thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+# setwd(thisdir)
+# 
+# last_results <- "/DT_combinations.csv"
+# DT <- fread(paste0(thisdir, last_results))
 
-last_results <- "/../05_Results/2022-12-1_18-13/DT_combinations.csv"
-DT <- fread(paste0(thisdir, last_results))
+
+DT <- fread("DT_combinations.csv")
+
+
+
 #DT_tmp <- fread(paste0(thisdir, "/../05_Results/2022-11-21_10-1/DT_combinations_2.csv"))
 #DT <- rbind(DT, DT_tmp)
 #DT_final <- fread(paste0(thisdir, "/../05_Results/2022-9-5_12-38/DT_final.csv"))
