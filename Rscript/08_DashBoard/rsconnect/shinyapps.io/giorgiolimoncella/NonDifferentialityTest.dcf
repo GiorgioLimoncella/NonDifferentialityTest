@@ -5,7 +5,7 @@ account: giorgiolimoncella
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 9678848
-bundleId: 7608848
+bundleId: 7609710
 url: https://giorgiolimoncella.shinyapps.io/NonDifferentialityTest/
 version: 1
 asMultiple: FALSE

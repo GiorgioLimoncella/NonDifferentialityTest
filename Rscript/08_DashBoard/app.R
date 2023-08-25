@@ -40,28 +40,29 @@ ui <- fluidPage( theme = shinytheme("flatly"),
 
     # Application title
    
-    navbarPage("Multiple Component Strategy - Simulations",
+    navbarPage("Simulations",
     
                tabPanel( "Test on non-differential sensitivity",
                          
                          sidebarPanel(width=3,
-                                      HTML("Please select the following parameters:"),
+                                      HTML("Select the following parameters:"),
                                       HTML("<br><br>"),
                                       selectInput("prop_exp", "Proportion of exposed",
-                                                   c(0.05, 0.1, 0.2)),
+                                                   c(0.05, 0.2)),
                                        
                                       selectInput("sample_size", "Sample size",
                                                  c("100_100_50",
+                                                   "200_200_100",
                                                    "300_300_150")),
                                        
                                       selectInput("prev_ne", "Prevalence in non-exposed group",
-                                                  c(0.01, 0.1)),
+                                                  c(0.01, 0.05, 0.1)),
                                       
                                       selectInput("risk", "Risk ratio",
                                                   c(1.2, 2)),
                                       
                                       selectInput("SE_B_int_A_e", "SE B int A",
-                                                  c(0.2, 0.4))
+                                                  c(0, 0.2, 0.4))
                          ),
                 
                 # Show a plot of the generated distribution
@@ -79,9 +80,9 @@ ui <- fluidPage( theme = shinytheme("flatly"),
                 )
                ),
       
-    tabPanel("Algorithm Simulation",
+    tabPanel("PPV: MC distribution",
              sidebarPanel(width=3,
-               selectInput("SE_ratio", "Please select the sensitivity ratiop:",
+               selectInput("SE_ratio", "Select the sensitivity ratio:",
                            c("0.6",
                              "0.8",
                              "1",
@@ -168,23 +169,33 @@ server <- function(input, output) {
     
       # selected <- paste0("0.1_", input$prev_ne_PPV, "_", input$risk_PPV)
       # DT_selected_PPV <- DT_PPV[combination==selected]
-      DT_selected_PPV <- fread(paste0(thisdir, "/../05_Results/2022-11-22_11-27/DT_PPV_RR_",
+      DT_selected_PPV <- fread(paste0("DT_PPV_RR_",
                                       input$prop_exp,"_",
                                       input$prev_ne,"_",
                                       input$risk, "_", 
                                       tmp,  "_",
                                       "0.5_",
                                       input$sample_size,
+                                      "_",
                                       input$SE_B_int_A_e,
                                       ".csv"))
       
-      DT_selected_PPV <- melt(DT_selected_PPV, id.vars = c(),
-                              measure.vars = c("PPV_A_e",  
-                                               "PPV_A_ne", 
-                                               "PPV_B_e",  
-                                               "PPV_B_ne", 
-                                               "PPV_C_e",  
-                                               "PPV_C_ne"))
+      if(input$SE_B_int_A_e != 0){
+        DT_selected_PPV <- data.table::melt(DT_selected_PPV, id.vars = c(),
+                                            measure.vars = c("PPV_A_e",  
+                                                             "PPV_A_ne", 
+                                                             "PPV_B_e",  
+                                                             "PPV_B_ne", 
+                                                             "PPV_C_e",  
+                                                             "PPV_C_ne"))
+      }else{
+        DT_selected_PPV <- data.table::melt(DT_selected_PPV, id.vars = c(),
+                                            measure.vars = c("PPV_A_e",  
+                                                             "PPV_A_ne", 
+                                                             "PPV_B_e",  
+                                                             "PPV_B_ne"))
+      }
+     
 
       setnames(DT_selected_PPV, "variable", "algorithm")
       setnames(DT_selected_PPV, "value","PPV")
