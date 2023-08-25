@@ -2,8 +2,8 @@
 # Non-Differentiality Test: HPC- script
 #--------------------------------------
 
-rm(list=ls(all.names=TRUE))
 
+rm(list=ls(all.names=TRUE))
 #------------------------------
 # Setting the working directory
 #------------------------------
@@ -53,23 +53,12 @@ prop_exp_list    <- c(0.05, 0.2)
 pi_ne_list       <- c(0.01, 0.05, 0.1)                                     
 risk_list        <- c(1.2, 2)  
 
-# sensitivity_list <-  list(list( e = 0.2858, ne = 0.7142),       # 0.4        
-#                           list( e = 0.375,  ne = 0.625),        # 0.6
-#                           list( e = 0.4445, ne = 0.5555),       # 0.8      
-#                           list( e = 0.5,    ne = 0.5),          # 1
-#                           list( e = 0.545,  ne = 0.454),        # 1.2
-#                           list( e = 0.5833, ne = 0.4166),       # 1.4
-#                           list( e = 0.6155, ne = 0.3845))       # 1.6  
 
-
-sensitivity_list <-  list(#list(e = 0.2, ne = 0.5),       # 0.4        
-                          list(e = 0.3, ne = 0.5),       # 0.6
+sensitivity_list <-  list(list(e = 0.3, ne = 0.5),       # 0.6
                           list(e = 0.4, ne = 0.5),       # 0.8      
                           list(e = 0.5, ne = 0.5),       # 1
                           list(e = 0.6, ne = 0.5),       # 1.2
-                          list(e = 0.7, ne = 0.5))#,       # 1.4
-                          #list(e = 0.8, ne = 0.5))       # 1.6  
-
+                          list(e = 0.7, ne = 0.5))       # 1.4
 
 P_A_int_B_list <- c(0, 0.2, 0.4)
 
@@ -205,7 +194,6 @@ for (h in prop_exp_list) {
               
               fwrite(Result, paste0(dirresults, "/Results.csv"))
             }
-            #stop("stop")
           }
         }
       }
@@ -222,18 +210,3 @@ if (length(TestPower) != length(combination)) {
   warning("Result: length(TestPower) != length(combination)")
 }
 fwrite(Result, paste0(dirresults, "/Results.csv"))
-#save.image(paste0(dirresults, "/env.RData"))
-
-
-#---------------
-
-#Note 
-
-# invece di fissare SE di B|A:
-# 1. set SE_ AUB
-# 2. imposta SE di A e SE_ A int B
-# 3. ricava SE di B
-
-# metti in chiaro che le SP sono indipendenti dato Y (per semplificare)
-
-
