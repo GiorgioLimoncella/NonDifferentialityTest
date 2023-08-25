@@ -4,7 +4,7 @@ Welcome to the NonDifferentialityTest repository. Here, you will find code and s
 
 ## Shiny App
 
-Our test has been applied across various scenarios, and we're willing to introduce a Shiny app that visually presents the outcomes of these simulation studies for each scenario we investigated. You can access the app via the following link: 
+Our test has been applied across various scenarios, and we developed a Shiny app that visually presents the outcomes of these simulation studies for each scenario we investigated. You can access the app via the following link: 
 
 [Non-differentility tes](https://giorgiolimoncella.shinyapps.io/NonDifferentialityTest/)
 
