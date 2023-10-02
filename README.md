@@ -4,7 +4,7 @@ Welcome to the NonDifferentialityTest repository. Here, you will find
 
 * code to run a novel test designed to detect non-differential sensitivity of an indicator
 * code to run a simulation to assess power of the test
-* simulation results for sone specified scenarios (in the Shinity Ap).
+* simulation results for some specified scenarios (in the Shiny Ap).
 
 ## Shiny App
 
