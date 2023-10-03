@@ -1,10 +1,10 @@
-## Non-Differentiallity Sensitivity Test
+## Non-Differential Sensitivity Test
 
-Welcome to the NonDifferentialityTest repository. Here, you will find
+Welcome to the NonDifferential Sensitivity Test repository. Here, you will find
 
 * code to run a novel test designed to detect non-differential sensitivity of an indicator
 * code to run a simulation to assess power of the test
-* simulation results for some specified scenarios (in the Shiny Ap).
+* simulation results for some specified scenarios (in the Shiny App).
 
 ## Shiny App
 
