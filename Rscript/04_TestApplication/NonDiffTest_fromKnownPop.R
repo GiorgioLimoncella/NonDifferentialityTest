@@ -1,6 +1,24 @@
 #------------------
 # Teast Application
 #------------------
+n_validated_A_e <- z$a/2
+n_validated_B_e <- z$b/2
+
+n_validated_A_ne <- z$a/2
+n_validated_B_ne <- z$b/2
+
+if(SE_A_int_B_e == 0){
+  n_validated_AintB_e <- 0
+  n_validated_AintB_ne <- 0
+}else{
+  n_validated_AintB_e  <- z$b/2
+  n_validated_AintB_ne <- z$c/2
+}
+
+
+N_boot <- nboot
+
+
 PPV_A_e <- DT_A[A==1 & E==1 & Y==1, .N] / DT_A[A==1 & E==1, .N]
 PPV_A_ne <-  DT_A[A==1 & E==0 & Y==1, .N] / DT_A[A==1 & E==0, .N]
 
