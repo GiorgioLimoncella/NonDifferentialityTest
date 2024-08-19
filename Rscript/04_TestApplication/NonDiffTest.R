@@ -62,14 +62,24 @@ if(quant_025 < 0 & quant_975>0){
 
 DF <- data.frame(t = t_vector)
 
-plt <- ggplot(DF, aes(x = t))+
-  geom_density(col = "salmon", fill = "salmon", alpha = 0.5)+
-  geom_vline(xintercept = quant_025, col = "red")+
-  geom_vline(xintercept = quant_975, col = "red")+
-  geom_vline(xintercept = 0, col = "grey6", linetype = "dashed")+
-  xlab("Test statistic bootstrap distribution")+
-  labs(title = "Non-Differentiality test")+
-  theme_bw()+
+# plt <- ggplot(DF, aes(x = t))+
+#   geom_density(col = "salmon", fill = "salmon", alpha = 0.5)+
+#   geom_vline(xintercept = quant_025, col = "red")+
+#   geom_vline(xintercept = quant_975, col = "red")+
+#   geom_vline(xintercept = 0, col = "grey6", linetype = "dashed")+
+#   xlab("Test statistic bootstrap distribution")+
+#   labs(title = "Non-Differentiality test")+
+#   theme_bw()+
+#   theme(text = element_text(family = "serif"))
+
+plt <- ggplot(DF, aes(x = t)) +
+  geom_density(col = "#7DA7D9", fill = "#B0C4DE", alpha = 0.5) +  # blu pastello
+  geom_vline(xintercept = quant_025, col = "#5F9EA0") +  # azzurro grigio
+  geom_vline(xintercept = quant_975, col = "#5F9EA0") +  # azzurro grigio
+  geom_vline(xintercept = 0, col = "#8B8B8B", linetype = "dashed") +  # grigio scuro
+  xlab("Test statistic bootstrap distribution") +
+  labs(title = "Non-Differentiality test") +
+  theme_bw() +
   theme(text = element_text(family = "serif"))
   
 ggsave(paste0(dirresults, "/NonDiffTest_Stat_Distribution.png"), 

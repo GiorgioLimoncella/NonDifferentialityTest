@@ -11,6 +11,11 @@ thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 thisdir<-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 setwd(thisdir)
 
+#------------------------------
+# Library
+#------------------------------
+source(paste0(thisdir, "/01_Parameters/ProgramParameters.R"))
+
 #-----------------------------------------------
 # Getting date and time, creating results folder
 #-----------------------------------------------
